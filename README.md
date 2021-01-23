@@ -1,6 +1,8 @@
 # Welcome to My Repository!
 
-This is the space where I store all of my documents
+This is the space where I store all of my documents related to Dr. Brenton Wiernik's Programming with Data class. The homework, projects, and assignments related to this class will be stored here. 
+
+Navigating through the repository should be easy enough. Assignments will be labeled as the assignment type (hw or project), and will be labeled with the date the assignment was due.
 
 
 ## Tyler Allan
