@@ -10,9 +10,13 @@ Navigating through the repository should be easy enough. Assignments will be lab
 ### Graduate Student at the University of South Florida
 
 
-Hello!! My name is Tyler, and I am from Atlanta Georgia. I can be summed up pretty well by this [video](https://youtu.be/dQw4w9WgXcQ) I absolutely __adore__ cats, but for most of my life I would say that *peacocks* were my favorite animal. A list of all things amazing about peacocks
+Hello, my name is Tyler Allan. I am a current graduate student at the University of South Florida working towards a PhD in Industrial-Organizational Psychology. Despite growing up in Georgia, I lack many of the traits that are stereotypically indicative of being from the South. Those include:
 
-* Those feathers!
-* The attitude!
-  * Really though watch out, [fiesty](https://youtu.be/7Wa22DegTwM)
-* You know they just think they're better than anyone else, and they're probably right
+* A Southern Accent
+* A pick-up truck
+* A love of country music
+  * _the exception to this rule is Dolly Parton music_
+  
+
+  
+
