@@ -5,8 +5,9 @@ This is the space where I store all of my documents related to Dr. Brenton Wiern
 Navigating through the repository should be easy enough. Assignments will be labeled as the assignment type (hw or project), and will be labeled with the date the assignment was due.
 
 
+#About Me
 ## Tyler Allan
-### Graduate Student
+### Graduate Student at the University of South Florida
 
 
 Hello!! My name is Tyler, and I am from Atlanta Georgia. I can be summed up pretty well by this [video](https://youtu.be/dQw4w9WgXcQ) I absolutely __adore__ cats, but for most of my life I would say that *peacocks* were my favorite animal. A list of all things amazing about peacocks
