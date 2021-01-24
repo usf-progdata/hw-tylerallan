@@ -1,0 +1,49 @@
+---
+title: "hw01_exploring_data.Rmd"
+author: "Tyler Allan"
+date: "1/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Penguins Package
+
+```{r}
+library(palmerpenguins)
+palmerpenguins::penguins
+
+```
+
+First some basic summary of the data.
+
+```{r}
+summary(penguins)
+
+
+```
+
+Next some calculations based off of the variables
+
+```{r}
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
