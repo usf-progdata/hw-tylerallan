@@ -2,7 +2,9 @@
 title: "hw01_exploring_data.Rmd"
 author: "Tyler Allan"
 date: "1/23/2021"
-output: html_document
+output: 
+        github_document: default
+        html_document: default
 ---
 
 ```{r setup, include=FALSE}
