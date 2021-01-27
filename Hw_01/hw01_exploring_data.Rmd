@@ -1,0 +1,55 @@
+---
+title: "hw01_exploring_data.Rmd"
+author: "Tyler Allan"
+date: "1/23/2021"
+output: 
+        github_document: default
+        html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Penguins Package
+
+```{r}
+library(palmerpenguins)
+palmerpenguins::penguins
+
+```
+
+First some basic summary of the data.
+
+```{r}
+summary(penguins)
+nrow(penguins)
+ncol(penguins)
+```
+
+Next I'll try out some of the other functions that are in the progdata website.
+
+```{r}
+head(penguins)
+tail(penguins)
+str(penguins)
+row.names(penguins)
+names(penguins)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
