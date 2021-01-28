@@ -71,9 +71,12 @@ ggplot(gapminder) +
 - Change the x-axis text to be in "comma format" with `scales::comma_format()`.
 - Separate each continent into sub-panels.
 
-```{r, fig.width = 5, fig.height = 2}
+```{r, fig.width = 10, fig.height = 4}
 ggplot(gapminder) +
-  aes(gdpPercap, lifeExp) +
+  aes(gdpPercap, lifeExp,
+      fill = continent,
+      color = continent) +
+  facet_wrap(~ continent) +
   geom_point(alpha = 0.2) +
   scale_x_log10(labels = scales::comma_format())
 ```
@@ -85,14 +88,18 @@ ggplot(gapminder) +
   - Try adding a `scale_size_area()` layer too
 - Use `shape=21` to distinguish between `fill` (interior) and `color` (exterior). 
 
-```{r, fig.width = 5, fig.height = 2}
+```{r, fig.width = 10, fig.height = 4}
 gapminder_noOceania <- filter(gapminder, continent != "Oceania")
 
 ggplot(gapminder_noOceania) +
-  aes(gdpPercap, lifeExp) +
-  facet_wrap(~ continent) +
-  geom_point(alpha = 0.2) +
-  scale_x_log10(labels = scales::comma_format())
+  aes(gdpPercap, lifeExp,
+      fill = continent,
+      col = continent,
+      size = pop)  +
+  facet_wrap(~ continent, nrow = 1, scales = "free") +
+  geom_point(shape = 21, alpha = .2) +
+  scale_x_log10(labels = scales::comma_format()) +
+  scale_size_area()
 ```
 
 A list of shapes can be found [at the bottom of the `scale_shape` documentation](https://ggplot2.tidyverse.org/reference/scale_shape.html).
@@ -101,10 +108,14 @@ A list of shapes can be found [at the bottom of the `scale_shape` documentation]
 
 Instead of alpha transparency, suppose you're wanting to fix the overplotting issue by plotting small points. Why is this not working? Fix it.
 
-```{r, fig.width = 5, fig.height = 2}
+```{r, fig.width = 10, fig.height = 4}
 ggplot(gapminder) +
-  aes(gdpPercap, lifeExp, size = 0.1) +
-  geom_point() +
+  aes(gdpPercap, lifeExp, gdpPercap, lifeExp,
+      fill = continent,
+      col = continent,
+      size = pop) +
+   facet_wrap(~ continent, nrow = 1, scales = "free") +
+  geom_point(size = .001) +
   scale_x_log10(labels = scales::dollar_format())
 ```
 
