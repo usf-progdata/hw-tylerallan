@@ -189,12 +189,15 @@ ggplot(americas) +
 
 ```{r, fig.width = 5, fig.height = 2}
 mtcars2 <- mutate(mtcars, transmission = if_else(am == 0, "automatic", "manual"))
+mtcars2$cyltype <- cut(mtcars2$cyl, breaks = c(4,6,8, Inf), labels = c("4","6","8"))
+
 ggplot(mtcars2) +
   aes(cyl, Percent) +
   geom_bar(aes(color = transmission,
                fill = transmission,
     y = (..count..)/sum(..count..)),
     position = "dodge") +
+  scale_x_discrete(labels = c("4", "6", "8")) +
   scale_y_continuous(labels=scales::percent)
 ```
 
@@ -211,8 +214,8 @@ Fix the following bar plot so that it shows these counts.
 
 ```{r}
 ggplot(hair) +
-  aes(Hair, n) +
-  geom_bar()
+  aes(Hair) +
+  geom_bar(y = n)
 ```
 
 ## Exercise 7: Tiling
