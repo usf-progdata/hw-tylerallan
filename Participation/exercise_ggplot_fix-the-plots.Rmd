@@ -216,8 +216,9 @@ Fix the following bar plot so that it shows these counts.
 
 ```{r}
 ggplot(hair) +
-  aes(Hair) +
-  geom_bar(y = n)
+  aes(x = Hair, y = n, fill = Hair) +
+  geom_bar(stat = "identity") + 
+  scale_fill_manual("legend", values = c("Black" = "black", "Blond" = "yellow", "Brown" = "brown", "Red" = "red"))
 ```
 
 ## Exercise 7: Tiling
