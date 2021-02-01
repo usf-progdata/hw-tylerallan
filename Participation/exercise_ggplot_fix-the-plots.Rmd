@@ -192,13 +192,15 @@ mtcars2 <- mutate(mtcars, transmission = if_else(am == 0, "automatic", "manual")
 mtcars2$cyltype <- cut(mtcars2$cyl, breaks = c(4,6,8, Inf), labels = c("4","6","8"))
 
 ggplot(mtcars2) +
-  aes(cyl, Percent) +
+  aes(cyltype, Percent) +
   geom_bar(aes(color = transmission,
                fill = transmission,
     y = (..count..)/sum(..count..)),
     position = "dodge") +
   scale_x_discrete(labels = c("4", "6", "8")) +
-  scale_y_continuous(labels=scales::percent)
+  scale_y_continuous(labels=scales::percent) +
+  scale_color_viridis_d(name = "Transmission") +
+  scale_fill_viridis_d(name = "Transmission")
 ```
 
 ### 6(b) Bar heights already calculated
