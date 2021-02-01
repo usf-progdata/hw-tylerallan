@@ -142,7 +142,7 @@ caribou_path <-
 
 ggplot(caribou_path) +
   aes(x, y) + 
-  geom_line()
+  geom_line(arrow = arrow()) + geom_text(label = "time")
 ```
 
 ## Exercise 5: Life expectancies in Africa
@@ -155,14 +155,14 @@ There is also the problem of overlapping text in the x-axis labels.
 How could we solve that?
   - Try to add `guide = guide_axis(n.dodge=3)` to the x scale
 
-```{r, fig.width = 5, fig.height = 2}
+```{r, fig.width = 10, fig.height = 4}
 americas <- filter(gapminder, continent == "Americas")
 
 ggplot(americas) + 
   aes(country, lifeExp) +
-  geom_point() +
   geom_boxplot() +
-  scale_x_discrete()
+  geom_point() +
+  scale_x_discrete(guide = guide_axis(n.dodge=3))
 ```
 
 ### 5(b) Ridgeplots
@@ -170,10 +170,10 @@ ggplot(americas) +
 We're starting with the same plot as above, but instead of the points + boxplot, try a ridge plot instead using `ggridges::geom_density_ridges()`, and adjust the `bandwidth`.
 
 ```{r, fig.width = 5, fig.height = 2}
-ggplot(americas) +
-  aes(country, lifeExp) +
-  geom_point() +
-  geom_boxplot()
+#ggplot(americas) +
+ # aes(country, lifeExp) +
+library(ggridges)
+  ggridges::geom_density_ridges(americas) + aes(mapping = NULL, country, lifeExp)
 ```
 
 ## Exercise 6: Bar plot madness
