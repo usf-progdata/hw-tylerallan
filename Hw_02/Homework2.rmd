@@ -1,0 +1,19 @@
+---
+title: "HW02"
+author: "Tyler Allan"
+date: "2/5/2021"
+output: html_document: default
+        github_document: default
+---
+```{r}
+library(gapminder)
+library(tidyverse)
+library(ggplot2)
+```
+
+#1.1 Use filter() to subset the gapminder data to three countries of your choice in the 1970's
+```{r}
+gapminder %>% 
+  filter(country == c("Afghanistan", "Mongolia", "France", "Italy"))
+
+```
