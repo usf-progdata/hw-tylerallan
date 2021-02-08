@@ -80,7 +80,25 @@ penguin %>%
             sdgd = sd(bill_depth_mm),
             meangl = mean(bill_length_mm),
             sdgl = sd(bill_length_mm),
+            meangf = mean(flipper_length_mm),
+            sdgf = sd(flipper_length_mm),
             n = n())
+  ggplot(penguin) +
+      aes(x = bill_length_mm,
+          y = bill_depth_mm,
+          fill = species,
+          color = species) +
+      geom_point()
+  ggplot(penguin) +
+    aes(x = species) +
+   geom_bar()
+  ggplot(penguin) +
+  aes(x = bill_length_mm,
+      y = flipper_length_mm,
+      fill = species,
+      color = species) +
+  geom_point()
+
 ```
 
 
