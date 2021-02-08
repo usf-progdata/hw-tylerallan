@@ -54,7 +54,17 @@ gapminder %>%
 
 #2.1 Pick two quantitative variables to explore. Make a table of descriptive statistics for these variables using summarize (include whatever statistics you feel appropriate). Make a scatterplot of these variables using ggplot()
 ```{r}
+library(palmerpenguins)
+palmerpenguins::penguins
 
+penguin <- na.omit(penguins)
+penguin
+penguin %>% 
+  summarize(meanl = mean(bill_length_mm),
+            sdl = sd(bill_depth_mm),
+            meand = mean(bill_length_mm),
+            sdd = sd(bill_depth_mm),
+  )           
 ```
 
 #2.2 Pick one categorical variable and one quantitative variable to explore. Make a summary table giving the sample size (hint: n()) and descriptive statistics for the quantitative variable by group. Make one or more useful plots to visualize these variables.
