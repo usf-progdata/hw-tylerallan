@@ -38,7 +38,8 @@ deltalifeExp %>%
 #1.4 Filter gapminder so that it shows the max GDP per capita experienced by each country. Hint: you might find the max() function useful here.
 ```{r}
 gapminder %>% 
-  filter(max(gdpPercap))
+  group_by(country) %>% 
+  filter(gdpPercap %in% max(gdpPercap))
 ```
 
 #1.5 Produce a scatterplot of Canada's life expectancy vs. GDP per capita using ggplot2, without defining a new variable. That is, after filtering the gapminder data set, pipe it directly into the ggplot function. In your plot, put GDP per capita on a log scale. 
