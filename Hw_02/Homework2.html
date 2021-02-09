@@ -327,15 +327,12 @@ penguin</code></pre>
 ## 10 Adelie  Torge~           34.6          21.1              198        4400
 ## # ... with 323 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 <pre class="r"><code>penguin %&gt;% 
-  summarize(meanl = mean(bill_length_mm),
-            sdl = sd(bill_depth_mm),
-            meand = mean(bill_length_mm),
-            sdd = sd(bill_depth_mm),
-  )</code></pre>
+  summarize(across(c(bill_length_mm, bill_depth_mm),
+                   list(mean = mean, SD = sd)))</code></pre>
 <pre><code>## # A tibble: 1 x 4
-##   meanl   sdl meand   sdd
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  44.0  1.97  44.0  1.97</code></pre>
+##   bill_length_mm_mean bill_length_mm_SD bill_depth_mm_mean bill_depth_mm_SD
+##                 &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;            &lt;dbl&gt;
+## 1                44.0              5.47               17.2             1.97</code></pre>
 <pre class="r"><code>    ggplot(penguins) +
       aes(x = bill_length_mm,
           y = bill_depth_mm) +
