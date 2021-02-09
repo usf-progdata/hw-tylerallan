@@ -62,11 +62,8 @@ palmerpenguins::penguins
 penguin <- na.omit(penguins)
 penguin
 penguin %>% 
-  summarize(meanl = mean(bill_length_mm),
-            sdl = sd(bill_depth_mm),
-            meand = mean(bill_length_mm),
-            sdd = sd(bill_depth_mm),
-  )
+  summarize(across(c(bill_length_mm, bill_depth_mm),
+                   list(mean = mean, SD = sd)))
 
     ggplot(penguins) +
       aes(x = bill_length_mm,
