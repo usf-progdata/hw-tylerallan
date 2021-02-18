@@ -2,7 +2,7 @@
 
 title: "HW03"
 author: "Tyler Allan"
-date: "2/5/2021"
+date: "2/18/2021"
 output: 
     html_document: default 
     github_document: default 
@@ -15,6 +15,7 @@ The dataset includes data from **students** and **non-students**.
 ```{r}
 dictionary <- readr::read_csv("green_dictionary.csv")
 green_data <- readr::read_csv("green_data.csv")
+library(tidyverse)
 ```
 
 For your assignment, do the following.
@@ -23,7 +24,9 @@ For your assignment, do the following.
      Is anything unusual?
 
 ```{r}
-
+print(green_data)
+summary(green_data$comp1)
+view(green_data)
 ```
 
   2. Compute total scores for the four scales. 
