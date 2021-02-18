@@ -25,8 +25,18 @@ For your assignment, do the following.
 
 ```{r}
 print(green_data)
-summary(green_data$comp1)
 view(green_data)
+
+summary(green_data$comp1)
+green_data %>% 
+  recode
+green_data %>% 
+  mutate(
+    across(green1:open10,
+                ~ recode(.x, "-99" == "NA"),
+           .names = "{.col}r"))
+
+
 ```
 
   2. Compute total scores for the four scales. 
