@@ -30,7 +30,7 @@ summary(green_data$comp1)
 new_green_data <- green_data %>% 
                 na_if("-99")
 print(new_green_data)
-summary(new_green_data$comp1)
+summary(new_green_data$green1)
 ```
 
   2. Compute total scores for the four scales. 
@@ -48,10 +48,11 @@ new_green_data %>%
 ```
 
   3. Rescale the variables so that they go from 0-100 instead of the original range.
-     Name the recaled variables `*_pomp`.
+     Name the rescaled variables `*_pomp`.
 
 ```{r}
-
+library(scales)
+new_green_data$green_pomp <- rescale(new_green_data$green1, to = c(1,100))
 ```
 
   4. Make plots that illustrate the distributions of the 4 POMP-scored variables.
