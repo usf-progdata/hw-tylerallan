@@ -28,13 +28,9 @@ print(green_data)
 view(green_data)
 
 summary(green_data$comp1)
+
 green_data %>% 
-  recode
-green_data %>% 
-  mutate(
-    across(green1:open10,
-                ~ recode(.x, "-99" == "NA"),
-           .names = "{.col}r"))
+  na_if("-99")
 
 
 ```
