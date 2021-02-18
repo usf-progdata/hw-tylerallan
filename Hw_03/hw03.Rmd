@@ -37,6 +37,13 @@ summary(new_green_data$comp1)
      Recode variables as needed.
      
 ```{r}
+new_green_data %>% 
+  select(green1:open10) %>% 
+  rowwise() %>% 
+  mutate(green_tot = sum(c(green1,green2,green3,green4,green5), na.rm = TRUE),
+         comp_tot = sum(c(comp1,comp2,comp3,comp4,comp5,comp6,comp7,comp8,comp9,comp10), na.rm = TRUE),
+         intel_tot = sum(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7,intel8,intel9,intel10), na.rm = TRUE),
+         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7,open8,open9,open10), na.rm = TRUE),)
 
 ```
 
