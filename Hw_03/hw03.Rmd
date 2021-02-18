@@ -25,14 +25,12 @@ For your assignment, do the following.
 
 ```{r}
 print(green_data)
-view(green_data)
-
 summary(green_data$comp1)
 
-green_data %>% 
-  na_if("-99")
-
-
+new_green_data <- green_data %>% 
+                na_if("-99")
+print(new_green_data)
+summary(new_green_data$comp1)
 ```
 
   2. Compute total scores for the four scales. 
