@@ -37,13 +37,22 @@ summary(new_green_data$green1)
      Recode variables as needed.
      
 ```{r}
-new_green_data %>% 
-  select(green1:open10) %>% 
+reversed <- c("green2", "comp6", "comp7", "comp8", "comp9", "comp10", 
+              "intel7", "intel8", "intel9", "intel10", "open7", "open8", 
+              "open9", "open10")
+new_green_datar <- new_green_data %>% 
+                    mutate(
+                           across(all_of(reversed),
+                           ~ recode(.x, "1" = 5, "2" = 4, "4" = 2, "5" = 1),
+                           .names = "{.col}r")
+                          ) 
+
+new_green_datar %>% 
   rowwise() %>% 
-  mutate(green_tot = sum(c(green1,green2,green3,green4,green5), na.rm = TRUE),
-         comp_tot = sum(c(comp1,comp2,comp3,comp4,comp5,comp6,comp7,comp8,comp9,comp10), na.rm = TRUE),
-         intel_tot = sum(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7,intel8,intel9,intel10), na.rm = TRUE),
-         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7,open8,open9,open10), na.rm = TRUE),) %>% 
+  mutate(green_tot = sum(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
+         comp_tot = sum(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
+         intel_tot = sum(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
+         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) %>% 
   select(green_tot,comp_tot,intel_tot,open_tot)
 ```
 
@@ -51,8 +60,13 @@ new_green_data %>%
      Name the rescaled variables `*_pomp`.
 
 ```{r}
-library(scales)
-new_green_data$green_pomp <- rescale(new_green_data$green1, to = c(1,100))
+new_green_datar <- new_green_datar %>% 
+                    mutate(
+                           across(all_of(reversed),
+                           ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
+                           .names = "{.col}_pomp")
+                          ) 
+
 ```
 
   4. Make plots that illustrate the distributions of the 4 POMP-scored variables.
