@@ -109,6 +109,37 @@ Of the four pomp scored histograms only the green variable appears to be normall
      What do these plots show?
 
 ```{r}
+new_green_data_pomp <- new_green_data_pomp %>%
+  mutate(
+    student = recode(student, "1" = "Nonstudent", "2" = "Student")
+  )
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
+  aes(x = green_tot_pomp,
+      y = comp_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
+  aes(x = green_tot_pomp,
+      y = intel_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
+  aes(x = green_tot_pomp,
+      y = open_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
 ```
 
