@@ -142,6 +142,8 @@ ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
 ```
+#Description
+The trend lines for green reputation across all three personality variables appear to follow similar trends. Students low in green reputation tend to score below the nonstudents on their personality variables, but as green reputation scores increase, students tend to be higher in their persoanlity variables than nonstudents. 
 
   6. Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
