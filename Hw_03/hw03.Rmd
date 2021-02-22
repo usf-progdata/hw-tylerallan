@@ -84,22 +84,25 @@ new_green_data_pomp <- new_green_data_pomp %>%
 ```{r}
 
 
-ggplot(new_green_data_pomp) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
   aes(x = green_tot_pomp) +
   geom_histogram(binwidth = 10)
 
-ggplot(new_green_data_pomp) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
   aes(x = comp_tot_pomp) +
   geom_histogram(binwidth = 10)
 
-ggplot(new_green_data_pomp) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
   aes(x = intel_tot_pomp) +
   geom_histogram(binwidth = 10)
 
-ggplot(new_green_data_pomp) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
   aes(x = open_tot_pomp) +
   geom_histogram(binwidth = 10)
 ```
+
+#Response
+Of the four pomp scored histograms only the green variable appears to be normally distributed around the center of the score distribution. The other three variables, open, intel, and comp appear to be skewed to the left such that more people responded in the higher range across these items.
 
   5. Make scatterplots showing the relationships between **green reputation** and each personality trait.
      Include trend lines for **students** and **non-students**.
