@@ -60,12 +60,14 @@ new_green_datar %>%
      Name the rescaled variables `*_pomp`.
 
 ```{r}
-new_green_datar <- new_green_datar %>% 
+new_green_data_pomp <- new_green_datar %>% 
                     mutate(
-                           across(all_of(reversed),
+                           across(c(green1:open10r),
                            ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
                            .names = "{.col}_pomp")
-                          ) 
+                          )
+
+
 
 ```
 
