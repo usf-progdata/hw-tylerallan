@@ -149,10 +149,10 @@ The trend lines for green reputation across all three personality variables appe
 
 ```{r}
 ggplot(na.omit(new_green_data_pomp)) +
-  aes(y = species,
-      x = flipper_length_mm,
-      fill = species,
-      color = species) +
+  aes(y = student,
+      x = green_tot_pomp,
+      fill = student,
+      color = student) +
   geom_jitter(height = .15) +
   geom_boxplot(color = "black",
                alpha = .5,
@@ -164,6 +164,8 @@ ggplot(na.omit(new_green_data_pomp)) +
                     alpha = .5,
                     position = position_nudge(y = .2))
 ```
+#Description
+Based on the rainfall plot, nonstudents appear to have a slightly higher average green reputation than students. The data for students is slightly more varied around the mean than that for the nonstudents. 
 
   7. Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
   
