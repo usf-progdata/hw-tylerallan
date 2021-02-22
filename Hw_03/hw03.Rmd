@@ -1,5 +1,5 @@
 # Homework 03
-
+```
 title: "HW03"
 author: "Tyler Allan"
 date: "2/18/2021"
@@ -7,7 +7,7 @@ output:
     html_document: default 
     github_document: default 
     keep_md: TRUE
-
+```
 
 You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
 The dataset includes data from **students** and **non-students**.
@@ -170,8 +170,30 @@ Based on the rainfall plot, nonstudents appear to have a slightly higher average
   7. Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
   
 ```{r}
-
+new_green_data_pomp %>% 
+  group_by(student) %>% 
+  summarize(mean_green = mean(green_tot_pomp),
+            sd_green = sd(green_tot_pomp),
+            median_green = median(green_tot_pomp),
+            min_green = min(green_tot_pomp),
+            max_green = max(green_tot_pomp),
+            mean_comp = mean(comp_tot_pomp),
+            sd_comp = sd(comp_tot_pomp),
+            median_comp = median(comp_tot_pomp),
+            min_comp = min(comp_tot_pomp),
+            max_comp = max(comp_tot_pomp),
+            mean_intel = mean(intel_tot_pomp),
+            sd_intel = sd(intel_tot_pomp),
+            median_intel = median(intel_tot_pomp),
+            min_intel = min(intel_tot_pomp),
+            max_intel = max(intel_tot_pomp),
+            mean_open = mean(open_tot_pomp),
+            sd_open = sd(open_tot_pomp),
+            median_open = median(open_tot_pomp),
+            min_open = min(open_tot_pomp),
+            max_open = max(open_tot_pomp),)
 ```
-
+#Description
+Nonstudents had a higher mean with less deviation from the mean than students in their green reputation data. Nonstudents also had a higher mean intel score than students. Students had higher means on comp and open variables. Additionally the standard deviation for students on these variables was higher than that for nonstudents as well. Maximum and minimum scores across the variables tended to be similar with many of the maximums and minimums matching for both nonstudents and students such as for max comp and open as well. The medians for both students and nonstudents also tended to be very similar to one another. 
   
 In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
