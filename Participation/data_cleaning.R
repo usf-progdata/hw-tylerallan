@@ -2,7 +2,7 @@ library(dplyr)
 library(tidyr)
 library(tibble)
 install.packages("psychTools")
-dat_bfi <- psych::bfi
+dat_bfi <- psychTools::bfi
 key_bfi <- psych::bfi.keys
 
 head(dat_bfi)
