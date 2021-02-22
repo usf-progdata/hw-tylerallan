@@ -47,26 +47,34 @@ new_green_datar <- new_green_data %>%
                            .names = "{.col}r")
                           ) 
 
-new_green_datar %>% 
+new_green_datar <- new_green_datar %>% 
   rowwise() %>% 
   mutate(green_tot = sum(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
          comp_tot = sum(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
          intel_tot = sum(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
-         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) %>% 
-  select(green_tot,comp_tot,intel_tot,open_tot)
+         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) 
 ```
 
   3. Rescale the variables so that they go from 0-100 instead of the original range.
      Name the rescaled variables `*_pomp`.
 
 ```{r}
+
 new_green_data_pomp <- new_green_datar %>% 
                     mutate(
                            across(c(green1:open10r),
                            ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
                            .names = "{.col}_pomp")
                           )
-
+new_green_data_pomp <- new_green_data_pomp %>% 
+  rowwise() %>% 
+  mutate(green_tot_pomp = sum(c(green1_pomp,green2r_pomp,green3_pomp,green4_pomp,green5_pomp), na.rm = TRUE),
+         comp_tot_pomp = sum(c(comp1_pomp,comp2_pomp,comp3_pomp,comp4_pomp,comp5_pomp,comp6r_pomp,comp7r_pomp,
+                               comp8r_pomp,comp9r_pomp,comp10r_pomp), na.rm = TRUE),
+         intel_tot_pomp = sum(c(intel1_pomp,intel2_pomp,intel3_pomp,intel4_pomp,intel5_pomp,intel6_pomp,intel7r_pomp,
+                                intel8r_pomp,intel9r_pomp,intel10r_pomp), na.rm = TRUE),
+         open_tot_pomp = sum(c(open1_pomp,open2_pomp,open3_pomp,open4_pomp,open5_pomp,open6_pomp,open7r_pomp,
+                               open8r_pomp,open9r_pomp,open10r_pomp), na.rm = TRUE),) 
 
 
 ```
@@ -75,6 +83,22 @@ new_green_data_pomp <- new_green_datar %>%
 
 ```{r}
 
+
+ggplot(new_green_data_pomp) +
+  aes(x = green_tot_pomp) +
+  geom_histogram(binwidth = 10)
+
+ggplot(new_green_data_pomp) +
+  aes(x = comp_tot_pomp) +
+  geom_histogram(binwidth = 10)
+
+ggplot(new_green_data_pomp) +
+  aes(x = intel_tot_pomp) +
+  geom_histogram(binwidth = 10)
+
+ggplot(new_green_data_pomp) +
+  aes(x = open_tot_pomp) +
+  geom_histogram(binwidth = 10)
 ```
 
   5. Make scatterplots showing the relationships between **green reputation** and each personality trait.
