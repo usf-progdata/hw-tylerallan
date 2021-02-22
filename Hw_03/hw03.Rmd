@@ -1,4 +1,3 @@
-# Homework 03
 ```
 title: "HW03"
 author: "Tyler Allan"
@@ -8,6 +7,9 @@ output:
     github_document: default 
     keep_md: TRUE
 ```
+# Homework 03
+
+
 
 You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
 The dataset includes data from **students** and **non-students**.
@@ -101,7 +103,7 @@ ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
   geom_histogram(binwidth = 10)
 ```
 
-#Description
+# Description
 
 Of the four pomp scored histograms only the green variable appears to be normally distributed around the center of the score distribution. The other three variables, open, intel, and comp appear to be skewed to the left such that more people responded in the higher range across these items.
 
@@ -143,7 +145,7 @@ ggplot(na.omit(new_green_data_pomp)) +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
 ```
-#Description
+# Description
 
 The trend lines for green reputation across all three personality variables appear to follow similar trends. Students low in green reputation tend to score below the nonstudents on their personality variables, but as green reputation scores increase, students tend to be higher in their persoanlity variables than nonstudents. 
 
@@ -166,7 +168,7 @@ ggplot(na.omit(new_green_data_pomp)) +
                     alpha = .5,
                     position = position_nudge(y = .2))
 ```
-#Description
+# Description
 
 Based on the rainfall plot, nonstudents appear to have a slightly higher average green reputation than students. The data for students is slightly more varied around the mean than that for the nonstudents. 
 
@@ -196,7 +198,7 @@ new_green_data_pomp %>%
             min_open = min(open_tot_pomp),
             max_open = max(open_tot_pomp),)
 ```
-#Description
+# Description
 
 Nonstudents had a higher mean with less deviation from the mean than students in their green reputation data. Nonstudents also had a higher mean intel score than students. Students had higher means on comp and open variables. Additionally the standard deviation for students on these variables was higher than that for nonstudents as well. Maximum and minimum scores across the variables tended to be similar with many of the maximums and minimums matching for both nonstudents and students such as for max comp and open as well. The medians for both students and nonstudents also tended to be very similar to one another. 
   
