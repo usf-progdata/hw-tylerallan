@@ -1,12 +1,12 @@
-```
+---
 title: "HW03"
 author: "Tyler Allan"
 date: "2/18/2021"
 output: 
-    html_document: default 
     github_document: default 
+    html_document: default 
     keep_md: TRUE
-```
+---
 # Homework 03
 
 
