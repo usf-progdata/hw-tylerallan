@@ -30,7 +30,9 @@ print(green_data)
 summary(green_data$comp1)
 
 new_green_data <- green_data %>% 
-                na_if("-99")
+                   na_if("-99") %>% 
+                     mutate(student = recode(student, "1" = "Nonstudent", "2" = "Student")
+                            )  
 print(new_green_data)
 summary(new_green_data$green1)
 ```
@@ -51,10 +53,10 @@ new_green_datar <- new_green_data %>%
 
 new_green_datar <- new_green_datar %>% 
   rowwise() %>% 
-  mutate(green_tot = sum(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
-         comp_tot = sum(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
-         intel_tot = sum(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
-         open_tot = sum(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) 
+  mutate(green_tot = mean(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
+         comp_tot = mean(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
+         intel_tot = mean(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
+         open_tot = mean(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) 
 ```
 
   3. Rescale the variables so that they go from 0-100 instead of the original range.
@@ -70,12 +72,12 @@ new_green_data_pomp <- new_green_datar %>%
                           )
 new_green_data_pomp <- new_green_data_pomp %>% 
   rowwise() %>% 
-  mutate(green_tot_pomp = sum(c(green1_pomp,green2r_pomp,green3_pomp,green4_pomp,green5_pomp), na.rm = TRUE),
-         comp_tot_pomp = sum(c(comp1_pomp,comp2_pomp,comp3_pomp,comp4_pomp,comp5_pomp,comp6r_pomp,comp7r_pomp,
+  mutate(green_tot_pomp = mean(c(green1_pomp,green2r_pomp,green3_pomp,green4_pomp,green5_pomp), na.rm = TRUE),
+         comp_tot_pomp = mean(c(comp1_pomp,comp2_pomp,comp3_pomp,comp4_pomp,comp5_pomp,comp6r_pomp,comp7r_pomp,
                                comp8r_pomp,comp9r_pomp,comp10r_pomp), na.rm = TRUE),
-         intel_tot_pomp = sum(c(intel1_pomp,intel2_pomp,intel3_pomp,intel4_pomp,intel5_pomp,intel6_pomp,intel7r_pomp,
+         intel_tot_pomp = mean(c(intel1_pomp,intel2_pomp,intel3_pomp,intel4_pomp,intel5_pomp,intel6_pomp,intel7r_pomp,
                                 intel8r_pomp,intel9r_pomp,intel10r_pomp), na.rm = TRUE),
-         open_tot_pomp = sum(c(open1_pomp,open2_pomp,open3_pomp,open4_pomp,open5_pomp,open6_pomp,open7r_pomp,
+         open_tot_pomp = mean(c(open1_pomp,open2_pomp,open3_pomp,open4_pomp,open5_pomp,open6_pomp,open7r_pomp,
                                open8r_pomp,open9r_pomp,open10r_pomp), na.rm = TRUE),) 
 
 
@@ -88,35 +90,36 @@ new_green_data_pomp <- new_green_data_pomp %>%
 
 ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
   aes(x = green_tot_pomp) +
-  geom_histogram(binwidth = 10)
+  geom_histogram(binwidth = 1,
+                 fill = "magenta")
 
 ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
   aes(x = comp_tot_pomp) +
-  geom_histogram(binwidth = 10)
+  geom_histogram(binwidth = 1,
+                 fill = "cyan")
 
 ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
   aes(x = intel_tot_pomp) +
-  geom_histogram(binwidth = 10)
+  geom_histogram(binwidth = 1,
+                 fill = "blue")
 
 ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
   aes(x = open_tot_pomp) +
-  geom_histogram(binwidth = 10)
+  geom_histogram(binwidth = 1,
+                 fill = "gold")
 ```
 
-# Description
 
-Of the four pomp scored histograms only the green variable appears to be normally distributed around the center of the score distribution. The other three variables, open, intel, and comp appear to be skewed to the left such that more people responded in the higher range across these items.
+## Description
+
+
+Of the four pomp scored histograms, two appear to be normally distributed around the center of the score distribution. The data on green reputation and intellectual curiosity appear to have data that is fairly normally distributed around the center of the range of data here. The other two variables, openness to experiences and compassion, appear to be skewed to the left such that more people responded in the higher range across these items.
 
   5. Make scatterplots showing the relationships between **green reputation** and each personality trait.
      Include trend lines for **students** and **non-students**.
      What do these plots show?
 
 ```{r}
-new_green_data_pomp <- new_green_data_pomp %>%
-  mutate(
-    student = recode(student, "1" = "Nonstudent", "2" = "Student")
-  )
-
 ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
       y = comp_tot_pomp,
@@ -145,9 +148,11 @@ ggplot(na.omit(new_green_data_pomp)) +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
 ```
-# Description
 
-The trend lines for green reputation across all three personality variables appear to follow similar trends. Students low in green reputation tend to score below the nonstudents on their personality variables, but as green reputation scores increase, students tend to be higher in their persoanlity variables than nonstudents. 
+## Description
+
+
+The trend lines for green reputation across all three personality variables appear to follow similar trends. Students low in green reputation tend to score below the nonstudents on their personality variables, but as green reputation scores increase, students tend to be higher in their personality variables than nonstudents. 
 
   6. Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
 
@@ -168,7 +173,9 @@ ggplot(na.omit(new_green_data_pomp)) +
                     alpha = .5,
                     position = position_nudge(y = .2))
 ```
-# Description
+
+## Description
+
 
 Based on the rainfall plot, nonstudents appear to have a slightly higher average green reputation than students. The data for students is slightly more varied around the mean than that for the nonstudents. 
 
@@ -177,28 +184,18 @@ Based on the rainfall plot, nonstudents appear to have a slightly higher average
 ```{r}
 new_green_data_pomp %>% 
   group_by(student) %>% 
-  summarize(mean_green = mean(green_tot_pomp),
-            sd_green = sd(green_tot_pomp),
-            median_green = median(green_tot_pomp),
-            min_green = min(green_tot_pomp),
-            max_green = max(green_tot_pomp),
-            mean_comp = mean(comp_tot_pomp),
-            sd_comp = sd(comp_tot_pomp),
-            median_comp = median(comp_tot_pomp),
-            min_comp = min(comp_tot_pomp),
-            max_comp = max(comp_tot_pomp),
-            mean_intel = mean(intel_tot_pomp),
-            sd_intel = sd(intel_tot_pomp),
-            median_intel = median(intel_tot_pomp),
-            min_intel = min(intel_tot_pomp),
-            max_intel = max(intel_tot_pomp),
-            mean_open = mean(open_tot_pomp),
-            sd_open = sd(open_tot_pomp),
-            median_open = median(open_tot_pomp),
-            min_open = min(open_tot_pomp),
-            max_open = max(open_tot_pomp),)
+  summarize(across(c(green_tot_pomp,open_tot_pomp,intel_tot_pomp,comp_tot_pomp),
+                   list(Mean = ~ mean(.x, na.rm = TRUE),
+                        SD = ~ sd(.x, na.rm = TRUE),
+                        Median = ~ median(.x, na.rm = TRUE),
+                        Min = ~ min(.x, na.rm = TRUE),
+                        Max = ~ max(.x, na.rm = TRUE)))
+  )
+
 ```
-# Description
+
+## Description
+
 
 Nonstudents had a higher mean with less deviation from the mean than students in their green reputation data. Nonstudents also had a higher mean intel score than students. Students had higher means on comp and open variables. Additionally the standard deviation for students on these variables was higher than that for nonstudents as well. Maximum and minimum scores across the variables tended to be similar with many of the maximums and minimums matching for both nonstudents and students such as for max comp and open as well. The medians for both students and nonstudents also tended to be very similar to one another. 
   
