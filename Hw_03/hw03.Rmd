@@ -64,7 +64,7 @@ new_green_datar <- new_green_datar %>%
 
 new_green_data_pomp <- new_green_datar %>% 
                     mutate(
-                           across(c(green1:open10r),
+                           across(c(green1:open10r, -student),
                            ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
                            .names = "{.col}_pomp")
                           )
