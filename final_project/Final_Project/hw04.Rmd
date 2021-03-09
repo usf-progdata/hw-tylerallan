@@ -32,7 +32,15 @@ thesisdata %>%
 
 Creating a Plot for the PGI
 ```{r}
-pgi_item_1_plot <- thesisdata %>% 
-  
+practice_plot <- thesisdata %>% 
+  ggplot()+
+  aes(y = pgi_01_I,
+      x = pgi_01_c) +
+  geom_point()
 
+practice_plot
+
+ggsave(here::here("Output", "Figures", "practice_plot.pdf"))
+ggsave(here::here("Output", "Figures", "practice_plot.tiff"))
+ggsave(here::here("Output", "Figures", "practice_plot.png"))
 ```
