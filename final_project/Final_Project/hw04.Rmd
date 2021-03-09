@@ -1,0 +1,38 @@
+---
+title: "Hw_04"
+author: "Tyler Allan"
+date: "3/8/2021"
+output: 
+          html_document: default
+          github_document: default
+---
+
+Reading in the data and all needed packages
+```{r}
+library(tidyverse)
+library(readxl)
+thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx"))
+```
+
+
+Creating a summary table for the PGI and the PCI items
+```{r}
+thesisdata %>% 
+  select(pgi_01_I:pci_42, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
+  summarize(across(c(pgi_01_I:pci_42),
+                   list(
+                     mu = ~mean(.x, na.rm = TRUE),
+                     sd = ~sd(.x, na.rm = TRUE),
+                     min = ~min(.x, na.rm = TRUE),
+                     max = ~max(.x, na.rm = TRUE)),
+                   ))
+
+```
+
+
+Creating a Plot for the PGI
+```{r}
+pgi_item_1_plot <- thesisdata %>% 
+  
+
+```
