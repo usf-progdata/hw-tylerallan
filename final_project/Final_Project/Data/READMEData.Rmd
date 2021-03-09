@@ -3,8 +3,8 @@ title: "READMEData.rmd"
 author: "Tyler Allan"
 date: "3/8/2021"
 output:
-        github_document: default
         html_document: default
+        github_document: default
 ---
 
 The PAINT dataset contains data from two different waves in a three wave longitudinal study. The first wave contains data on zygosity of individuals based on physical descriptors and saliva samples.The third wave of data collects occupation data for the parents and children as well as interests scores for the children. Missing values are indicated by an NA or a -99.
