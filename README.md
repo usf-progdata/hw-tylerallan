@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 <!-- Great work! Though you seem to have accidentally deleted the contents of README.md, but kept the HTML around. You only need the .md for a README file. I restored the md from the html here. -->
 
 # Welcome to My Repository!
 
 This is the space where I store all of my documents related to
 Dr. Brenton Wiernik's Programming with Data class. The homework,
+=======
+# Welcome to My Repository!
+
+This is the space where I store all of my documents related to
+Dr. Brenton Wiernik's Programming with Data class. The homework,
 projects, and assignments related to this class will be stored here.
 
 Navigating through the repository should be easy enough. Assignments

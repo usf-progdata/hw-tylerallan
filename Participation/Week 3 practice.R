@@ -13,3 +13,5 @@ library(learnr)
 
 
 progdata::tutorial_ggplot()
+progdata::tutorial_wrangle()
+1

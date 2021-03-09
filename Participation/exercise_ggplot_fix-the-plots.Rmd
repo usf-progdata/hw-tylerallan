@@ -247,7 +247,17 @@ If you'd like some practice, give these exercises a try
 __Exercise 1__: 
 Make a plot of `year` (x) vs `lifeExp` (y), with points colored by continent. 
 Then, to that same plot, fit a **straight** regression line to each continent.
+```{r, fig.width = 5, fig.height = 2}
+ggplot(gapminder) +
+  aes(x = year,
+      y = lifeExp,
+      fill = lifeExp,
+      color = lifeExp) +
+  geom_point() +
+  geom_smooth(color = "black",
+              fill = "black")
 
+```
 __Exercise 1b__: 
 Repeat Exercise 1, but remove the error band from around the regression line.
 
