@@ -182,7 +182,8 @@ Based on the rainfall plot, nonstudents appear to have a slightly higher average
   7. Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
   
 ```{r}
-new_green_data_pomp %>% 
+new_green_data_pomp %>%
+  drop_na(student) %>% 
   group_by(student) %>% 
   summarize(across(c(green_tot_pomp,open_tot_pomp,intel_tot_pomp,comp_tot_pomp),
                    list(Mean = ~ mean(.x, na.rm = TRUE),
