@@ -1,0 +1,63 @@
+---
+title: "Hw_04"
+author: "Tyler Allan"
+date: "3/8/2021"
+output: 
+          html_document: default
+          github_document: default
+---
+
+Reading in the data and all needed packages
+```{r}
+library(tidyverse)
+library(readxl)
+thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx"))
+```
+
+
+Creating a summary table for the PGI and the PCI items
+```{r}
+thesisdatam <- thesisdata %>% 
+  select(pgi_01_I:pci_42, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
+  mutate(I_tot = mean(c(pgi_01_I,pgi_02_I,pgi_03_I,pgi_04_I,pgi_05_I,pgi_06_I,pgi_07_I,pgi_08_I,pgi_09_I,pgi_10_I,pgi_11_I,pgi_12_I,pgi_13_I,pgi_14_I,
+                        pgi_15_I,pgi_16_I,pgi_17_I,pgi_18_I,pgi_19_I,pgi_20_I,pgi_21_I,pgi_22_I,pgi_23_I,pgi_24_I,pgi_25_I,pgi_26_I,pgi_27_I,pgi_28_I,
+                        pgi_29_I,pgi_30_I,pgi_31_I,pgi_32_I,pgi_33_I,pgi_34_I,pgi_35_I,pgi_36_I,pgi_37_I,pgi_38_I,pgi_39_I,pgi_40_I), na.rm = TRUE),
+         C_tot = mean(c(pgi_01_c,pgi_02_c,pgi_03_c,pgi_04_c,pgi_05_c,pgi_06_c,pgi_07_c,pgi_08_c,pgi_09_c,pgi_10_c,pgi_11_c,pgi_12_c,pgi_13_c,pgi_14_c,
+                        pgi_15_c,pgi_16_c,pgi_17_c,pgi_18_c,pgi_19_c,pgi_20_c,pgi_21_c,pgi_22_c,pgi_23_c,pgi_24_c,pgi_25_c,pgi_26_c,pgi_27_c,pgi_28_c,
+                        pgi_29_c,pgi_30_c,pgi_31_c,pgi_32_c,pgi_33_c,pgi_34_c,pgi_35_c,pgi_36_c,pgi_37_c,pgi_38_c,pgi_39_c,pgi_40_c), na.rm = TRUE),
+         PCI_tot = mean(c(pci_01,pci_02,pci_03,pci_04,pci_05,pci_06,pci_07,pci_08,pci_09,pci_10,pci_11,pci_12,pci_13,pci_14,pci_15,pci_16,pci_17,pci_18,
+                          pci_19,pci_20,pci_21,pci_22,pci_23,pci_24,pci_25,pci_26,pci_27,pci_28,pci_29,pci_30,pci_31,pci_32,pci_33,pci_34,pci_35,pci_36,
+                          pci_37,pci_38,pci_39,pci_40,pci_41,pci_42), na.rm = TRUE)) %>% 
+  summarize(across(c(I_tot:PCI_tot),
+                   list(
+                     mu = ~mean(.x, na.rm = TRUE),
+                     sd = ~sd(.x, na.rm = TRUE),
+                     min = ~min(.x, na.rm = TRUE),
+                     max = ~max(.x, na.rm = TRUE)),
+                   ))
+
+thesisdatam %>% 
+  pivot_longer(
+    cols = "I_tot_mu":"PCI_tot_max",
+    names_to = c("Item", "Value"),
+    names_sep = "_tot_"
+  )
+thesisdatam
+
+```
+
+
+Creating a Plot for the PGI
+```{r}
+practice_plot <- thesisdata %>% 
+  ggplot()+
+  aes(y = pgi_01_I,
+      x = pgi_01_c) +
+  geom_point()
+
+practice_plot
+
+ggsave(here::here("Output", "Figures", "practice_plot.pdf"))
+ggsave(here::here("Output", "Figures", "practice_plot.tiff"))
+ggsave(here::here("Output", "Figures", "practice_plot.png"))
+```

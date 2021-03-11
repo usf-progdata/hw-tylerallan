@@ -1,0 +1,26 @@
+READMEData.rmd
+================
+Tyler Allan
+3/8/2021
+
+The PAINT dataset contains data from two different waves in a three wave
+longitudinal study. The first wave contains data on zygosity of
+individuals based on physical descriptors and saliva samples.The third
+wave of data collects occupation data for the parents and children as
+well as interests scores for the children. Missing values are indicated
+by an NA or a -99.
+
+| Variable                     | Description                                                                                                                                                                                                                            |
+|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| FAmIDNBR                     | Number value of the family used to group families together                                                                                                                                                                             |
+| ZYGO\_                       | All zygosity variables including when and where the data was collected as well as scores on the zygoisity measures used to indicate mono or dizygosity                                                                                 |
+| Family Number                | Variable that groups together different children from the same family                                                                                                                                                                  |
+| (Parent) Training            | Describes the education or training for either the father or the mother of the family group                                                                                                                                            |
+| (Parent) Occupation          | Describes the job of the parent at Time 1                                                                                                                                                                                              |
+| Child Nummber                | Label to describe the child in the study                                                                                                                                                                                               |
+| Type                         | Describes whether the child is a twin or a sibling                                                                                                                                                                                     |
+| PGI\_                        | Prefix used to indicate the twin’s answers to the Personal Globe Inventory, scored on a 1-7 scale                                                                                                                                      |
+| PCI\_                        | Prefix used to indicate the twin’s answers to the Position Classification Inventory. Lowercase letters indicate scores on the individual items uppercase letters indicate total scores for each RIASEC category, scored on a 1-3 scale |
+| \_\_\_\_ Occupation          | Descriptive response for the child’s/mother’s/father’s occupation                                                                                                                                                                      |
+| \_\_\_\_ Occupation Category | ONET category that best corresponds to the child’s/mother’s/father’s occupation                                                                                                                                                        |
+| \_OR/I/A/S/E/C\_J            | The RIASEC Scores given to each occupation on ONET broken up into Realistic, Investigative, Artistic, Social, Enterprising, and Conventional for the child/mother/father                                                               |
