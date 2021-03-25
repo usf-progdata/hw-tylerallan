@@ -246,7 +246,7 @@ Some useful arguments are:
 2. `check.overlap` 
   - Drop some labels if they overlap?
   - Mostly useful if the values are ordered.
-3. `angle`
+3. `angle` 
   - Rotation in degrees of axis labels
   - This is usually very hard to read and should be avoided.
 4. `n.dodge`

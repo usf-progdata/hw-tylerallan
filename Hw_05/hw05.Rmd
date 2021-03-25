@@ -116,18 +116,40 @@ Distinguish scented versus unscented candles using color, shape, and line type (
 
 ```{r combine datasets, eval=FALSE}
 candles_full <- bind_rows(
-	scented = candeles_scented, 
-	unscented = candeles_unscented, 
+	scented = Scented_all, 
+	unscented = Unscented_all, 
 	.id = "Scented"
 )
 ```
 
 ```{r}
+Combined_Plot <- candles_full %>%
+  filter(Date > "2017-01-01") %>%
+  group_by(Date) %>% 
+  mutate(Avg_Rating = mean(Rating)) %>% 
+  ggplot(
+    aes(x = as.Date(Date),
+        y = Avg_Rating,
+        shape = Scented,
+        color = Scented,
+        fill = Scented
+  )) + 
+  geom_point(alpha = .3) +
+  scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
+  geom_smooth(method = "loess") +
+  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") +
+  scale_y_continuous(name = "Average Rating") +
+  theme_minimal() +
+  ggtitle("Average Candle Reviews For Scented and Unscented Candles") + 
+  guides(x = guide_axis(n.dodge = 2)) + 
+  scale_color_viridis_d()
 
+Combined_Plot
 ```
 
 Which of these two sets of plots do you find easier to interpret?
 
+The combined plot is easier to interpret specifically if you are trying to compare the reviews of unscented and scented candles. Having the data overlap and specifically having the trend lines on the same graph allows for a very clear comparison of the two average ratings.
 
 ## Part 3: Proportion of reviews mentioning "no scent"
 
