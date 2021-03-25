@@ -245,7 +245,7 @@ Some useful arguments are:
   - Set the title of the axis guide
 2. `check.overlap` 
   - Drop some labels if they overlap?
-  - Mostly usful if the values are ordered.
+  - Mostly useful if the values are ordered.
 3. `angle`
   - Rotation in degrees of axis labels
   - This is usually very hard to read and should be avoided.

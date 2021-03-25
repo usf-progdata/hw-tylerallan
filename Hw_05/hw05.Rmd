@@ -76,13 +76,14 @@ Scented_Plot <- Scented_all %>%
     aes(x = as.Date(Date),
         y = Avg_Rating
   )) + 
-  geom_point(alpha = .3, color = "dark green") +
+  geom_point(alpha = .5, color = "dark green", shape = 1) +
   scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
   geom_smooth(method = "loess", color = "gold") +
   geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") +
   scale_y_continuous(name = "Average Rating") +
   theme_minimal() +
-  ggtitle("Average Scented Candle Reviews")
+  ggtitle("Average Scented Candle Reviews") + 
+  guides(x = guide_axis(n.dodge = 2))
 
 Unscented_Plot <- Unscented_all %>%
   filter(Date > "2017-01-01") %>%
@@ -92,20 +93,21 @@ Unscented_Plot <- Unscented_all %>%
     aes(x = as.Date(Date),
         y = Avg_Rating
   )) + 
-  geom_point(alpha = .3, color = "dark green") +
+  geom_point(alpha = .5, color = "dark green", shape = 1) +
   scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
   geom_smooth(method = "loess", color = "gold") +
   geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") + 
   scale_y_continuous(name = "Average Rating") + 
   theme_minimal() +
-  ggtitle("Average Unscented Candle Reviews")
+  ggtitle("Average Unscented Candle Reviews") +
+  guides(x = guide_axis(n.dodge = 2))
 
-grid.arrange(Scented_Plot, Unscented_Plot, ncol = 2)
+Scented_Plot + Unscented_Plot
 ```
 
 ### Description of the Plots
 
-
+Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings could be related to individuals not realizing they have lost thier sense of smell due to contracting COVID-19. 
 
 ## Part 2: Combined plot
 
