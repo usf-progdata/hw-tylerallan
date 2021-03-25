@@ -34,6 +34,7 @@ Each dataset contains the following information for the Top 3 selling scented or
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(readxl)
+library(gridExtra)
 
 Scented_all <- read_excel(here::here("Hw_05/Scented_all.xlsx"))
 Unscented_all <- read_excel(here::here("Hw_05/Unscented_all.xlsx"))
@@ -67,7 +68,7 @@ Interpret these graphs.
 What do they show about scented candles over the time period?
 
 ```{r}
-Scented_all %>%
+Scented_Plot <- Scented_all %>%
   filter(Date > "2017-01-01") %>%
   group_by(Date) %>% 
   mutate(Avg_Rating = mean(Rating)) %>% 
@@ -75,12 +76,15 @@ Scented_all %>%
     aes(x = as.Date(Date),
         y = Avg_Rating
   )) + 
-  geom_point(alpha = .5, shape = 1, color = "pink") +
+  geom_point(alpha = .3, color = "dark green") +
   scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
-  geom_smooth(method = "loess") +
-  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed")
+  geom_smooth(method = "loess", color = "gold") +
+  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") +
+  scale_y_continuous(name = "Average Rating") +
+  theme_minimal() +
+  ggtitle("Average Scented Candle Reviews")
 
-Unscented_all %>%
+Unscented_Plot <- Unscented_all %>%
   filter(Date > "2017-01-01") %>%
   group_by(Date) %>% 
   mutate(Avg_Rating = mean(Rating)) %>% 
@@ -88,11 +92,19 @@ Unscented_all %>%
     aes(x = as.Date(Date),
         y = Avg_Rating
   )) + 
-  geom_point(alpha = .5, shape = 1, color = "pink") +
+  geom_point(alpha = .3, color = "dark green") +
   scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
-  geom_smooth(method = "loess") +
-  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed")
+  geom_smooth(method = "loess", color = "gold") +
+  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") + 
+  scale_y_continuous(name = "Average Rating") + 
+  theme_minimal() +
+  ggtitle("Average Unscented Candle Reviews")
+
+grid.arrange(Scented_Plot, Unscented_Plot, ncol = 2)
 ```
+
+### Description of the Plots
+
 
 
 ## Part 2: Combined plot
