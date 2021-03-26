@@ -5,11 +5,9 @@ date: "2/18/2021"
 output: 
     github_document: default 
     html_document: default 
-    keep_md: TRUE
 ---
+
 # Homework 03
-
-
 
 You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
 The dataset includes data from **students** and **non-students**.
@@ -26,13 +24,12 @@ For your assignment, do the following.
      Is anything unusual?
 
 ```{r}
-print(green_data)
+print(green_data) # BMW: Don't print out whole datasets like this in your final script
 summary(green_data$comp1)
 
-new_green_data <- green_data %>% 
-                   na_if("-99") %>% 
-                     mutate(student = recode(student, "1" = "Nonstudent", "2" = "Student")
-                            )  
+new_green_data <- green_data %>%
+  na_if("-99") %>%
+  mutate(student = recode(student, "1" = "Nonstudent", "2" = "Student"))
 print(new_green_data)
 summary(new_green_data$green1)
 ```
@@ -44,66 +41,175 @@ summary(new_green_data$green1)
 reversed <- c("green2", "comp6", "comp7", "comp8", "comp9", "comp10", 
               "intel7", "intel8", "intel9", "intel10", "open7", "open8", 
               "open9", "open10")
-new_green_datar <- new_green_data %>% 
-                    mutate(
-                           across(all_of(reversed),
-                           ~ recode(.x, "1" = 5, "2" = 4, "4" = 2, "5" = 1),
-                           .names = "{.col}r")
-                          ) 
+new_green_datar <- new_green_data %>%
+  mutate(across(
+    all_of(reversed),
+    ~ recode(
+      .x,
+      "1" = 5,
+      "2" = 4,
+      "4" = 2,
+      "5" = 1
+    ),
+    .names = "{.col}r"
+  )) 
 
-new_green_datar <- new_green_datar %>% 
-  rowwise() %>% 
-  mutate(green_tot = mean(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
-         comp_tot = mean(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
-         intel_tot = mean(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
-         open_tot = mean(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) 
+new_green_datar <- new_green_datar %>%
+  rowwise() %>%
+  mutate(
+    green_tot = mean(c(green1, green2r, green3, green4, green5), na.rm = TRUE),
+    comp_tot = mean(
+      c(
+        comp1,
+        comp2,
+        comp3,
+        comp4,
+        comp5,
+        comp6r,
+        comp7r,
+        comp8r,
+        comp9r,
+        comp10r
+      ),
+      na.rm = TRUE
+    ),
+    intel_tot = mean(
+      c(
+        intel1,
+        intel2,
+        intel3,
+        intel4,
+        intel5,
+        intel6,
+        intel7r,
+        intel8r,
+        intel9r,
+        intel10r
+      ),
+      na.rm = TRUE
+    ),
+    open_tot = mean(
+      c(
+        open1,
+        open2,
+        open3,
+        open4,
+        open5,
+        open6,
+        open7r,
+        open8r,
+        open9r,
+        open10r
+      ),
+      na.rm = TRUE
+    ),
+  ) 
 ```
 
   3. Rescale the variables so that they go from 0-100 instead of the original range.
      Name the rescaled variables `*_pomp`.
 
 ```{r}
+new_green_data_pomp <- new_green_datar %>%
+  mutate(across(
+    c(green1:open10r, -student),
+    ~ recode(
+      .x,
+      "1" = 0,
+      "2" = 25,
+      "3" = 50,
+      "4" = 75,
+      "5" = 100
+    ),
+    .names = "{.col}_pomp"
+  ))
 
-new_green_data_pomp <- new_green_datar %>% 
-                    mutate(
-                           across(c(green1:open10r, -student),
-                           ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
-                           .names = "{.col}_pomp")
-                          )
-new_green_data_pomp <- new_green_data_pomp %>% 
-  rowwise() %>% 
-  mutate(green_tot_pomp = mean(c(green1_pomp,green2r_pomp,green3_pomp,green4_pomp,green5_pomp), na.rm = TRUE),
-         comp_tot_pomp = mean(c(comp1_pomp,comp2_pomp,comp3_pomp,comp4_pomp,comp5_pomp,comp6r_pomp,comp7r_pomp,
-                               comp8r_pomp,comp9r_pomp,comp10r_pomp), na.rm = TRUE),
-         intel_tot_pomp = mean(c(intel1_pomp,intel2_pomp,intel3_pomp,intel4_pomp,intel5_pomp,intel6_pomp,intel7r_pomp,
-                                intel8r_pomp,intel9r_pomp,intel10r_pomp), na.rm = TRUE),
-         open_tot_pomp = mean(c(open1_pomp,open2_pomp,open3_pomp,open4_pomp,open5_pomp,open6_pomp,open7r_pomp,
-                               open8r_pomp,open9r_pomp,open10r_pomp), na.rm = TRUE),) 
+# BMW: I would suggest this instead:
 
+# new_green_data_pomp <- new_green_datar %>%
+#   mutate(
+#     green_pomp = scales::rescale(green_tot, to = c(0, 100), from = c(1, 5)),
+#     comp_pomp = scales::rescale(comp_tot, to = c(0, 100), from = c(1, 5)),
+#     intel_pomp = scales::rescale(intel_tot, to = c(0, 100), from = c(1, 5)),
+#     open_pomp = scales::rescale(open_tot, to = c(0, 100), from = c(1, 5))
+#   )
 
+new_green_data_pomp <- new_green_data_pomp %>%
+  rowwise() %>%
+  mutate(
+    green_tot_pomp = mean(
+      c(
+        green1_pomp,
+        green2r_pomp,
+        green3_pomp,
+        green4_pomp,
+        green5_pomp
+      ),
+      na.rm = TRUE
+    ),
+    comp_tot_pomp = mean(
+      c(
+        comp1_pomp,
+        comp2_pomp,
+        comp3_pomp,
+        comp4_pomp,
+        comp5_pomp,
+        comp6r_pomp,
+        comp7r_pomp,
+        comp8r_pomp,
+        comp9r_pomp,
+        comp10r_pomp
+      ),
+      na.rm = TRUE
+    ),
+    intel_tot_pomp = mean(
+      c(
+        intel1_pomp,
+        intel2_pomp,
+        intel3_pomp,
+        intel4_pomp,
+        intel5_pomp,
+        intel6_pomp,
+        intel7r_pomp,
+        intel8r_pomp,
+        intel9r_pomp,
+        intel10r_pomp
+      ),
+      na.rm = TRUE
+    ),
+    open_tot_pomp = mean(
+      c(
+        open1_pomp,
+        open2_pomp,
+        open3_pomp,
+        open4_pomp,
+        open5_pomp,
+        open6_pomp,
+        open7r_pomp,
+        open8r_pomp,
+        open9r_pomp,
+        open10r_pomp), na.rm = TRUE),) 
 ```
 
   4. Make plots that illustrate the distributions of the 4 POMP-scored variables.
 
 ```{r}
-
-
-ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) + # BMW: I'm not sure why you are doing this. 0 is a legitimate valid value...
   aes(x = green_tot_pomp) +
   geom_histogram(binwidth = 1,
                  fill = "magenta")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) + # BMW: I'm not sure why you are doing this. 0 is a legitimate valid value...
   aes(x = comp_tot_pomp) +
   geom_histogram(binwidth = 1,
                  fill = "cyan")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) + # BMW: I'm not sure why you are doing this. 0 is a legitimate valid value...
   aes(x = intel_tot_pomp) +
   geom_histogram(binwidth = 1,
                  fill = "blue")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
+ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) + # BMW: I'm not sure why you are doing this. 0 is a legitimate valid value...
   aes(x = open_tot_pomp) +
   geom_histogram(binwidth = 1,
                  fill = "gold")
@@ -125,9 +231,9 @@ ggplot(na.omit(new_green_data_pomp)) +
       y = comp_tot_pomp,
       fill = student,
       color = student) +
+  # geom_point() + # BMW: Why the second geom_point()
   geom_point() +
-  geom_point() +
-  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+  geom_smooth() # BMW: You don't need the subset() there since you na.omit()ed.
 
 ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
@@ -135,8 +241,7 @@ ggplot(na.omit(new_green_data_pomp)) +
       fill = student,
       color = student) +
   geom_point() +
-  geom_point() +
-  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+  geom_smooth()
 
 ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
@@ -144,8 +249,7 @@ ggplot(na.omit(new_green_data_pomp)) +
       fill = student,
       color = student) +
   geom_point() +
-  geom_point() +
-  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+  geom_smooth()
 
 ```
 
@@ -162,7 +266,7 @@ ggplot(na.omit(new_green_data_pomp)) +
       x = green_tot_pomp,
       fill = student,
       color = student) +
-  geom_jitter(height = .15) +
+  geom_jitter(height = .15, width = 0) + # BMW: Don't forget width = 0 to avoid adding noise to the continuous dimeniosn.
   geom_boxplot(color = "black",
                alpha = .5,
                width = .1,
@@ -183,16 +287,18 @@ Based on the rainfall plot, nonstudents appear to have a slightly higher average
   
 ```{r}
 new_green_data_pomp %>%
-  drop_na(student) %>% 
-  group_by(student) %>% 
-  summarize(across(c(green_tot_pomp,open_tot_pomp,intel_tot_pomp,comp_tot_pomp),
-                   list(Mean = ~ mean(.x, na.rm = TRUE),
-                        SD = ~ sd(.x, na.rm = TRUE),
-                        Median = ~ median(.x, na.rm = TRUE),
-                        Min = ~ min(.x, na.rm = TRUE),
-                        Max = ~ max(.x, na.rm = TRUE)))
+  drop_na(student) %>%
+  group_by(student) %>%
+  summarize(
+    across(
+      c(green_tot_pomp, open_tot_pomp, intel_tot_pomp, comp_tot_pomp),
+      list(
+        Mean = ~ mean(.x, na.rm = TRUE),
+        SD = ~ sd(.x, na.rm = TRUE),
+        Median = ~ median(.x, na.rm = TRUE),
+        Min = ~ min(.x, na.rm = TRUE),
+        Max = ~ max(.x, na.rm =  TRUE)))
   )
-
 ```
 
 ## Description
