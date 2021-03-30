@@ -3,7 +3,6 @@ title: "Consequences of Covid-19 for Candle Critiques"
 author: "Tyler Allan"
 date: "3/22/2021"
 output:
-  github_document:
   html_document:
     code_folding: hide
     highlight: haddock
