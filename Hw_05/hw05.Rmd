@@ -3,12 +3,12 @@ title: "Consequences of Covid-19 for Candle Critiques"
 author: "Tyler Allan"
 date: "3/22/2021"
 output:
-  github_document: 
-    keep_md: true
   html_document:
     code_folding: hide
     highlight: haddock
     theme: lumen
+  github_document: 
+    keep_md: true
 ---
 
 For this assignment, you will produce a report exploring the impact of Covid-19 on scented candle ratings.
@@ -35,6 +35,7 @@ Each dataset contains the following information for the Top 3 selling scented or
 library(tidyverse)
 library(readxl)
 library(gridExtra)
+library(Hmisc)
 
 Scented_all <- read_excel(here::here("Hw_05/Scented_all.xlsx"))
 Unscented_all <- read_excel(here::here("Hw_05/Unscented_all.xlsx"))
@@ -102,12 +103,12 @@ Unscented_Plot <- Unscented_all %>%
   ggtitle("Average Unscented Candle Reviews") +
   guides(x = guide_axis(n.dodge = 2))
 
-Scented_Plot + Unscented_Plot
+grid.arrange(Scented_Plot, Unscented_Plot, ncol = 2)
 ```
 
 ### Description of the Plots
 
-Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings could be related to individuals not realizing they have lost thier sense of smell due to contracting COVID-19. 
+Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings could be related to individuals not realizing they have lost their sense of smell due to contracting COVID-19. 
 
 ## Part 2: Combined plot
 
@@ -125,7 +126,7 @@ candles_full <- bind_rows(
 ```{r}
 Combined_Plot <- candles_full %>%
   filter(Date > "2017-01-01") %>%
-  group_by(Date) %>% 
+  group_by(Date, Scented) %>% 
   mutate(Avg_Rating = mean(Rating)) %>% 
   ggplot(
     aes(x = as.Date(Date),
@@ -189,12 +190,29 @@ str_no_scent <- function(x){
   	)
   )
 }
+
+Scented_all$CodeReview <- str_no_scent(Scented_all$Review)
+Scented_all$CodedReview_f <- factor(Scented_all$CodeReview, labels = c("scent", "noscent"))
+print(Scented_all)
 ```
 
 ```{r}
+Scented2_Plot <- Scented_all %>%
+  filter(Date >= "2019-01-01") %>%
+  mutate(month = lubridate::floor_date(Date, "month"),
+         ) %>% 
+  group_by(month , CodedReview_f) %>% 
+  ggplot() +
+  aes(x = month, y = (..count..)/sum(..count..), fill = CodedReview_f, color = month) +
+  geom_bar(position = "dodge") +
+  stat_summary(aes(y = CodedReview_f), fun.data = mean_cl_normal)+
+  scale_color_viridis_d()
 
+Scented2_Plot
 ```
 
 What pattern do you see?
 Is there a trend over time regarding smell-related reviews? 
 How does 2020 compare to 2019?
+
+There are more reviews that indicate that candles have a scent across the two years than reviews that suggest the candles have no scent. The proportion of reviews mentioning there was no scent to the candles increased from 2019 into 2020. while the total percentage is still lower than the percentage of reviews mentioning the scent of the candles the difference from 2019 to 2020 is noticable.  
