@@ -68,9 +68,9 @@ What do they show about scented candles over the time period?
 
 ```{r}
 Scented_Plot <- Scented_all %>%
-  filter(Date > "2017-01-01") %>%
-  group_by(Date) %>% 
-  mutate(Avg_Rating = mean(Rating)) %>% 
+  filter(Date > "2017-01-01") %>% #making it so the dataset only includes data from after 2017-01-01
+  group_by(Date) %>% #grouping the data so it will give reviews by the date
+  mutate(Avg_Rating = mean(Rating)) %>% #computing an average daily rating for the set
   ggplot(
     aes(x = as.Date(Date),
         y = Avg_Rating
@@ -188,23 +188,23 @@ str_no_scent <- function(x){
   	)
   )
 }
-
-Scented_all$CodeReview <- str_no_scent(Scented_all$Review)
-Scented_all$CodedReview_f <- factor(Scented_all$CodeReview, labels = c("scent", "noscent"))
-print(Scented_all)
 ```
 
 ```{r}
 Scented2_Plot <- Scented_all %>%
   filter(Date >= "2019-01-01") %>%
   mutate(month = lubridate::floor_date(Date, "month"),
-         ) %>% 
-  group_by(month , CodedReview_f) %>% 
-  ggplot() +
-  aes(x = month, y = (..count..)/sum(..count..), fill = CodedReview_f, color = month) +
-  geom_bar(position = "dodge") +
-  stat_summary(aes(y = CodedReview_f), fun.data = mean_cl_normal)+
-  scale_color_viridis_d()
+         noscent = str_no_scent(Review),
+         year = ifelse(Date <= as.Date("2019-12-31"),"2019", "2020")) %>% 
+  group_by(as.Date(month), noscent) %>% 
+  ggplot() +  aes(x = as.Date(month), y = (..count..)/sum(..count..), color = as.factor(year), fill = as.factor(year)) +
+  geom_bar(alpha = .4) +
+  stat_summary(aes(y = noscent), fun.data = mean_cl_normal) +
+  scale_x_date(name = "Month and Year", date_labels = "%m-%Y", date_breaks = "month", expand = c(0,0)) + 
+  guides(x = guide_axis(n.dodge = 3), color = guide_legend(title = "Year"), fill = guide_legend(title = "Year")) +
+  scale_y_continuous(name = "Percentage of Reviews mentioning 'No Scent'") +
+  labs(title = "Percentage of Scented Candle Reviews Mentioning 'No Scent' in 2019 and 2020")
+
 
 Scented2_Plot
 ```
