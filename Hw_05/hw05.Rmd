@@ -106,7 +106,7 @@ grid.arrange(Scented_Plot, Unscented_Plot, ncol = 2)
 
 ### Description of the Plots
 
-Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings could be related to individuals not realizing they have lost their sense of smell due to contracting COVID-19. 
+Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings does not appear to be normal for the data and could be related to individuals not realizing they have lost their sense of smell due to contracting COVID-19. 
 
 ## Part 2: Combined plot
 
@@ -148,7 +148,7 @@ Combined_Plot
 
 Which of these two sets of plots do you find easier to interpret?
 
-The combined plot is easier to interpret specifically if you are trying to compare the reviews of unscented and scented candles. Having the data overlap and specifically having the trend lines on the same graph allows for a very clear comparison of the two average ratings.
+The combined plot is easier to interpret specifically if you are trying to compare the reviews of unscented and scented candles. Having the data overlap and specifically having the trend lines on the same graph allows for a very clear comparison of the two average ratings. Otherwise individuals would have to compare across the graphs and with both trend lines trending towards the top of the graph it may be harder to make accurate comparisons.
 
 ## Part 3: Proportion of reviews mentioning "no scent"
 
@@ -213,4 +213,4 @@ What pattern do you see?
 Is there a trend over time regarding smell-related reviews? 
 How does 2020 compare to 2019?
 
-There are more reviews that indicate that candles have a scent across the two years than reviews that suggest the candles have no scent. The proportion of reviews mentioning there was no scent to the candles increased from 2019 into 2020. while the total percentage is still lower than the percentage of reviews mentioning the scent of the candles the difference from 2019 to 2020 is noticable.  
+The overall proportion of reviews which indicated that a scented candle had no scent is larger in 2020 than it was in 2019. A stark increase in the proportion of reviews indicating there was no scent associated with the scented candle can be seen in December 2019 and January 2020. This would align with the beginnings of the spread of COVID-19 before cases were confirmed in the United States. This increase can be seen as people unaware their lack of scent was a sign of contracting the novel disease. The overall mean for these months is lower than the mean later on in 2020 indicating that more people were commenting about a lack of scent as the year went on. This could possibly be connected to increases in the cases of COVID-19.   
