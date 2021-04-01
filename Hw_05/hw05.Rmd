@@ -1,16 +1,24 @@
 ---
 title: "Consequences of Covid-19 for Candle Critiques"
-author: "Tyler Allan"
+author: "Your Name Here"
 date: "3/22/2021"
-output:
-  github_document:
-  html_document:
-    code_folding: hide
-    highlight: haddock
-    theme: lumen
+output: html_document
 ---
 
-This work is doing using data from amazon describing the following information for the Top 3 selling scented or unscented candles: (information given describes the varibale name then gives a description of what that variable is)
+For this assignment, you will produce a report exploring the impact of Covid-19 on scented candle ratings.
+
+Write this assignment like a report.
+You should describe the dataset, show appropriate plots, and interpret them.
+Remove the instruction text from this document.
+
+In your report, fold the code blocks, enable code highlighting, and set an HTML theme of your choice.
+Set other document options as you prefer and as appropriate.
+
+
+## The data
+
+You will work with two datasets `Scented_all.xlsx` and `Unscented_all.xlsx`.
+Each dataset contains the following information for the Top 3 selling scented or unscented candles sold on Amazon:
   
   1. `CandleID`: A numeric id variable for candle 1-3 in each category.
   2. `Date`: The date of the review.
@@ -18,102 +26,79 @@ This work is doing using data from amazon describing the following information f
   4. `Review`: For the scented candles, the text of the review.
 
 ```{r setup, include=FALSE}
-library(tidyverse)
-library(readxl)
-library(gridExtra)
-
-Scented_all <- read_excel(here::here("Hw_05/Scented_all.xlsx"))
-Unscented_all <- read_excel(here::here("Hw_05/Unscented_all.xlsx"))
-
+library(dplyr)
 ```
 
 
 ## Part 1: Average daily ratings for scented and unscented candles
 
+For each category of candle (scented versus unscented), for all days from **2017-01-01** onward, create a plot showing:
+
+  1. Date on the x axis
+    1. Hint: use `scale_x_date()`
+    2. Format the date labels as `"%m-%Y"`
+    3. Set the date breaks to be "6 months"
+  2. **Average daily rating** of each candle on the y axis
+  3. A smooth trend line (not linear; `method = "loess"`)
+  4. A dashed vertical line at January 01, 2020
+    1. Hint: use `geom_vline()` and set `xintercept = as.numeric(as.Date("2020-01-20"))`
+    
+Be sure to make the plots beautiful.
+
+  1. Address overplotting of points using transparency or shapes.
+  2. Use an appealing theme and color scheme.
+  3. Set appropriately formatted axis titles and main plot title.
+  4. Place the two plots side by side.
+  
+Note: The raw data are **individual reviews** so you will need to compute summary results to get average daily ratings for the desired date range.
+
+Interpret these graphs.
+What do they show about scented candles over the time period?
 
 ```{r}
-Scented_Plot <- Scented_all %>%
-  filter(Date > "2017-01-01") %>% #making it so the dataset only includes data from after 2017-01-01
-  group_by(Date) %>% #grouping the data so it will give reviews by the date
-  mutate(Avg_Rating = mean(Rating)) %>% #computing an average daily rating for the set
-  ggplot(
-    aes(x = as.Date(Date),
-        y = Avg_Rating
-  )) + 
-  geom_point(alpha = .5, color = "dark green", shape = 1) +
-  scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
-  geom_smooth(method = "loess", color = "gold") +
-  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") +
-  scale_y_continuous(name = "Average Rating") +
-  theme_minimal() +
-  ggtitle("Average Scented Candle Reviews") + 
-  guides(x = guide_axis(n.dodge = 2))
 
-Unscented_Plot <- Unscented_all %>%
-  filter(Date > "2017-01-01") %>%
-  group_by(Date) %>% 
-  mutate(Avg_Rating = mean(Rating)) %>% 
-  ggplot(
-    aes(x = as.Date(Date),
-        y = Avg_Rating
-  )) + 
-  geom_point(alpha = .5, color = "dark green", shape = 1) +
-  scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
-  geom_smooth(method = "loess", color = "gold") +
-  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") + 
-  scale_y_continuous(name = "Average Rating") + 
-  theme_minimal() +
-  ggtitle("Average Unscented Candle Reviews") +
-  guides(x = guide_axis(n.dodge = 2))
-
-grid.arrange(Scented_Plot, Unscented_Plot, ncol = 2)
 ```
 
-### Description of the Plots
-
-Both plots show a general skew towards the higher end of the scale meaning people are more likely to leave 5 star reviews than 1 star reviews. This trend begins to separate after the cutoff line place on January 20th 2020. Though the trend line for unscented candles does begin to trend down after January 20th, it does not appear to deviate enormously from what would be expected results. The average ratings for scented candles tell a different story. The trend line experiences a large drop off after January 20th 2020. This large decrease in average ratings does not appear to be normal for the data and could be related to individuals not realizing they have lost their sense of smell due to contracting COVID-19. 
 
 ## Part 2: Combined plot
 
+Combine the two datasets into one and make a plot similar to above, but showing both unscented and scented candles.
+Distinguish scented versus unscented candles using color, shape, and line type (for the trend lines).
 
-```{r combine datasets,}
+```{r combine datasets, eval=FALSE}
 candles_full <- bind_rows(
-	scented = Scented_all, 
-	unscented = Unscented_all, 
+	scented = candeles_scented, 
+	unscented = candeles_unscented, 
 	.id = "Scented"
 )
 ```
 
 ```{r}
-Combined_Plot <- candles_full %>%
-  filter(Date > "2017-01-01") %>%
-  group_by(Date, Scented) %>% 
-  mutate(Avg_Rating = mean(Rating)) %>% 
-  ggplot(
-    aes(x = as.Date(Date),
-        y = Avg_Rating,
-        shape = Scented,
-        color = Scented,
-        fill = Scented
-  )) + 
-  geom_point(alpha = .3) +
-  scale_x_date(name = "Date", date_breaks = "6 months", date_labels = "%m-%Y") +
-  geom_smooth(method = "loess") +
-  geom_vline(xintercept = as.numeric(as.Date("2020-01-20")), linetype = "dashed") +
-  scale_y_continuous(name = "Average Rating") +
-  theme_minimal() +
-  ggtitle("Average Candle Reviews For Scented and Unscented Candles") + 
-  guides(x = guide_axis(n.dodge = 2)) + 
-  scale_color_viridis_d()
 
-Combined_Plot
 ```
 
+Which of these two sets of plots do you find easier to interpret?
 
-The combined plot is easier to interpret specifically if you are trying to compare the reviews of unscented and scented candles. Having the data overlap and specifically having the trend lines on the same graph allows for a very clear comparison of the two average ratings. Otherwise individuals would have to compare across the graphs and with both trend lines trending towards the top of the graph it may be harder to make accurate comparisons.
 
 ## Part 3: Proportion of reviews mentioning "no scent"
 
+Use the scented candles database and make one more plot showing:
+
+  1. For **each month in 2019 and 2020**, 
+  2. On the x axis, month and year
+  3. On the y axis, the **proportion of reviews** mentioning that the scented candles have no smell
+    - Include both the mean (proportion) and a 95% confidence interval
+  4. Color the symbols by year (2019 vs 2020)
+
+As before, make the 
+
+Hints:
+
+  1. To round each date to its months, use:
+    - `mutate(month = lubridate::floor_date(Date, "month"))`
+  2. To compute a mean and confidence interval for a variable on a plot, similar to a box plot, use:
+    - `stat_summary(aes(y = noscent), fun.data = mean_cl_normal)`
+  3. Use the function below to detect "no smell"-related text in the `Review` column.
 
 ```{r no scent function, include=FALSE}
 str_no_scent <- function(x){
@@ -136,23 +121,9 @@ str_no_scent <- function(x){
 ```
 
 ```{r}
-Scented2_Plot <- Scented_all %>%
-  filter(Date >= "2019-01-01") %>%
-  mutate(month = lubridate::floor_date(Date, "month"),
-         noscent = str_no_scent(Review),
-         year = ifelse(Date <= as.Date("2019-12-31"),"2019", "2020")) %>% 
-  group_by(as.Date(month), noscent) %>% 
-  ggplot() +  aes(x = as.Date(month), y = (..count..)/sum(..count..), color = as.factor(year), fill = as.factor(year)) +
-  geom_bar(alpha = .4) +
-  stat_summary(aes(y = noscent), fun.data = mean_cl_normal) +
-  scale_x_date(name = "Month and Year", date_labels = "%m-%Y", date_breaks = "month", expand = c(0,0)) + 
-  guides(x = guide_axis(n.dodge = 3), color = guide_legend(title = "Year"), fill = guide_legend(title = "Year")) +
-  scale_y_continuous(name = "Percentage of Reviews mentioning 'No Scent'") +
-  labs(title = "Percentage of Scented Candle Reviews Mentioning 'No Scent' in 2019 and 2020")
 
-
-Scented2_Plot
 ```
 
-
-The overall proportion of reviews which indicated that a scented candle had no scent is larger in 2020 than it was in 2019. A stark increase in the proportion of reviews indicating there was no scent associated with the scented candle can be seen in December 2019 and January 2020. This would align with the beginnings of the spread of COVID-19 before cases were confirmed in the United States. This increase can be seen as people unaware their lack of scent was a sign of contracting the novel disease. The overall mean for these months is lower than the mean later on in 2020 indicating that more people were commenting about a lack of scent as the year went on. This could possibly be connected to increases in the cases of COVID-19.   
+What pattern do you see?
+Is there a trend over time regarding smell-related reviews? 
+How does 2020 compare to 2019?
