@@ -1,0 +1,203 @@
+---
+title: "HW03"
+author: "Tyler Allan"
+date: "2/18/2021"
+output: 
+    github_document: default 
+    html_document: default 
+    keep_md: TRUE
+---
+# Homework 03
+
+
+
+You will analyze data looking at the relationship between **green reputation** and three personality traits--**compassion**, **intellectual curiosity**, and **openness to experiences**.
+The dataset includes data from **students** and **non-students**.
+
+```{r}
+dictionary <- readr::read_csv("green_dictionary.csv")
+green_data <- readr::read_csv("green_data.csv")
+library(tidyverse)
+```
+
+For your assignment, do the following.
+
+  1. Inspect the item responses (e.g., with graphs or by summarizing distinct values). 
+     Is anything unusual?
+
+```{r}
+print(green_data)
+summary(green_data$comp1)
+
+new_green_data <- green_data %>% 
+                   na_if("-99") %>% 
+                     mutate(student = recode(student, "1" = "Nonstudent", "2" = "Student")
+                            )  
+print(new_green_data)
+summary(new_green_data$green1)
+```
+
+  2. Compute total scores for the four scales. 
+     Recode variables as needed.
+     
+```{r}
+reversed <- c("green2", "comp6", "comp7", "comp8", "comp9", "comp10", 
+              "intel7", "intel8", "intel9", "intel10", "open7", "open8", 
+              "open9", "open10")
+new_green_datar <- new_green_data %>% 
+                    mutate(
+                           across(all_of(reversed),
+                           ~ recode(.x, "1" = 5, "2" = 4, "4" = 2, "5" = 1),
+                           .names = "{.col}r")
+                          ) 
+
+new_green_datar <- new_green_datar %>% 
+  rowwise() %>% 
+  mutate(green_tot = mean(c(green1,green2r,green3,green4,green5), na.rm = TRUE),
+         comp_tot = mean(c(comp1,comp2,comp3,comp4,comp5,comp6r,comp7r,comp8r,comp9r,comp10r), na.rm = TRUE),
+         intel_tot = mean(c(intel1,intel2,intel3,intel4,intel5,intel6,intel7r,intel8r,intel9r,intel10r), na.rm = TRUE),
+         open_tot = mean(c(open1,open2,open3,open4,open5,open6,open7r,open8r,open9r,open10r), na.rm = TRUE),) 
+```
+
+  3. Rescale the variables so that they go from 0-100 instead of the original range.
+     Name the rescaled variables `*_pomp`.
+
+```{r}
+
+new_green_data_pomp <- new_green_datar %>% 
+                    mutate(
+                           across(c(green1:open10r, -student),
+                           ~ recode(.x, "1" = 0, "2" = 25, "3" = 50, "4" = 75, "5" = 100),
+                           .names = "{.col}_pomp")
+                          )
+new_green_data_pomp <- new_green_data_pomp %>% 
+  rowwise() %>% 
+  mutate(green_tot_pomp = mean(c(green1_pomp,green2r_pomp,green3_pomp,green4_pomp,green5_pomp), na.rm = TRUE),
+         comp_tot_pomp = mean(c(comp1_pomp,comp2_pomp,comp3_pomp,comp4_pomp,comp5_pomp,comp6r_pomp,comp7r_pomp,
+                               comp8r_pomp,comp9r_pomp,comp10r_pomp), na.rm = TRUE),
+         intel_tot_pomp = mean(c(intel1_pomp,intel2_pomp,intel3_pomp,intel4_pomp,intel5_pomp,intel6_pomp,intel7r_pomp,
+                                intel8r_pomp,intel9r_pomp,intel10r_pomp), na.rm = TRUE),
+         open_tot_pomp = mean(c(open1_pomp,open2_pomp,open3_pomp,open4_pomp,open5_pomp,open6_pomp,open7r_pomp,
+                               open8r_pomp,open9r_pomp,open10r_pomp), na.rm = TRUE),) 
+
+
+```
+
+  4. Make plots that illustrate the distributions of the 4 POMP-scored variables.
+
+```{r}
+
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
+  aes(x = green_tot_pomp) +
+  geom_histogram(binwidth = 1,
+                 fill = "magenta")
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
+  aes(x = comp_tot_pomp) +
+  geom_histogram(binwidth = 1,
+                 fill = "cyan")
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
+  aes(x = intel_tot_pomp) +
+  geom_histogram(binwidth = 1,
+                 fill = "blue")
+
+ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
+  aes(x = open_tot_pomp) +
+  geom_histogram(binwidth = 1,
+                 fill = "gold")
+```
+
+
+## Description
+
+
+Of the four pomp scored histograms, two appear to be normally distributed around the center of the score distribution. The data on green reputation and intellectual curiosity appear to have data that is fairly normally distributed around the center of the range of data here. The other two variables, openness to experiences and compassion, appear to be skewed to the left such that more people responded in the higher range across these items.
+
+  5. Make scatterplots showing the relationships between **green reputation** and each personality trait.
+     Include trend lines for **students** and **non-students**.
+     What do these plots show?
+
+```{r}
+ggplot(na.omit(new_green_data_pomp)) +
+  aes(x = green_tot_pomp,
+      y = comp_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+ggplot(na.omit(new_green_data_pomp)) +
+  aes(x = green_tot_pomp,
+      y = intel_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+ggplot(na.omit(new_green_data_pomp)) +
+  aes(x = green_tot_pomp,
+      y = open_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_point() +
+  geom_point() +
+  geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+```
+
+## Description
+
+
+The trend lines for green reputation across all three personality variables appear to follow similar trends. Students low in green reputation tend to score below the nonstudents on their personality variables, but as green reputation scores increase, students tend to be higher in their personality variables than nonstudents. 
+
+  6. Compare **green reputation** for students and non-students using a **rainfall plot** (bar + density + data points).
+
+```{r}
+ggplot(na.omit(new_green_data_pomp)) +
+  aes(y = student,
+      x = green_tot_pomp,
+      fill = student,
+      color = student) +
+  geom_jitter(height = .15) +
+  geom_boxplot(color = "black",
+               alpha = .5,
+               width = .1,
+               size = .5) +
+  ggdist::stat_slab(height = .3,
+                    color = "black",
+                    size = .2,
+                    alpha = .5,
+                    position = position_nudge(y = .2))
+```
+
+## Description
+
+
+Based on the rainfall plot, nonstudents appear to have a slightly higher average green reputation than students. The data for students is slightly more varied around the mean than that for the nonstudents. 
+
+  7. Compute a summary table of means, SDs, medians, minima, and maxima for the four total scores for students and non-students.
+  
+```{r}
+new_green_data_pomp %>%
+  drop_na(student) %>% 
+  group_by(student) %>% 
+  summarize(across(c(green_tot_pomp,open_tot_pomp,intel_tot_pomp,comp_tot_pomp),
+                   list(Mean = ~ mean(.x, na.rm = TRUE),
+                        SD = ~ sd(.x, na.rm = TRUE),
+                        Median = ~ median(.x, na.rm = TRUE),
+                        Min = ~ min(.x, na.rm = TRUE),
+                        Max = ~ max(.x, na.rm = TRUE)))
+  )
+
+```
+
+## Description
+
+
+Nonstudents had a higher mean with less deviation from the mean than students in their green reputation data. Nonstudents also had a higher mean intel score than students. Students had higher means on comp and open variables. Additionally the standard deviation for students on these variables was higher than that for nonstudents as well. Maximum and minimum scores across the variables tended to be similar with many of the maximums and minimums matching for both nonstudents and students such as for max comp and open as well. The medians for both students and nonstudents also tended to be very similar to one another. 
+  
+In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
