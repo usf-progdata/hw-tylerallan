@@ -74,7 +74,7 @@ Both plots show a general skew towards the higher end of the scale meaning peopl
 ## Part 2: Combined plot
 
 
-```{r combine datasets, eval=FALSE}
+```{r combine datasets}
 candles_full <- bind_rows(
 	scented = Scented_all, 
 	unscented = Unscented_all, 
