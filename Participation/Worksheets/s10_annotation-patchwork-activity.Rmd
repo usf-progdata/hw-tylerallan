@@ -12,6 +12,13 @@ To answer this question, use the `gapminder` dataset.
 1. Prepare your dataset. Load the `gapminder` package and make a new factor variable indicating whether a country is New Zealand/Australia (the `continent == "Oceania"` countries).
 
 ```{r}
+library(gapminder)
+library(tidyverse)
+library(patchwork)
+data(gapminder)
+
+gapminder %>% 
+  mutate(country_f <= (if_else(as.factor("Oceania"), "Oceania", "Other")))
 
 ```
 
@@ -19,7 +26,13 @@ To answer this question, use the `gapminder` dataset.
    Assign this plot to an object, then show it. (We will be adding more stuff to it later.)
 
 ```{r}
-
+trend <- gapminder %>% 
+  ggplot() +
+  aes(x = year,
+      y = lifeExp,
+      color = country) + 
+  geom_smooth()
+trend
 ```
 
 3. Now, update your plot above to emphasize the Oceania countries compared to the rest (e.g., use color, size [line width], and alpha).

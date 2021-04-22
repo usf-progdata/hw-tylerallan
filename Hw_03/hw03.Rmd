@@ -18,6 +18,7 @@ The dataset includes data from **students** and **non-students**.
 dictionary <- readr::read_csv("green_dictionary.csv")
 green_data <- readr::read_csv("green_data.csv")
 library(tidyverse)
+library(patchwork)
 ```
 
 For your assignment, do the following.
@@ -26,14 +27,14 @@ For your assignment, do the following.
      Is anything unusual?
 
 ```{r}
-print(green_data)
+
 summary(green_data$comp1)
 
 new_green_data <- green_data %>% 
                    na_if("-99") %>% 
                      mutate(student = recode(student, "1" = "Nonstudent", "2" = "Student")
                             )  
-print(new_green_data)
+
 summary(new_green_data$green1)
 ```
 
@@ -88,25 +89,26 @@ new_green_data_pomp <- new_green_data_pomp %>%
 ```{r}
 
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
+greenplot <- ggplot(new_green_data_pomp[which(new_green_data_pomp$green_tot_pomp>0),]) +
   aes(x = green_tot_pomp) +
   geom_histogram(binwidth = 1,
-                 fill = "magenta")
+                 fill = "dark green")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
+compplot <- ggplot(new_green_data_pomp[which(new_green_data_pomp$comp_tot_pomp>0),]) +
   aes(x = comp_tot_pomp) +
   geom_histogram(binwidth = 1,
-                 fill = "cyan")
+                 fill = "gold")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
+intelplot <- ggplot(new_green_data_pomp[which(new_green_data_pomp$intel_tot_pomp>0),]) +
   aes(x = intel_tot_pomp) +
   geom_histogram(binwidth = 1,
-                 fill = "blue")
+                 fill = "gold")
 
-ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
+openplot <- ggplot(new_green_data_pomp[which(new_green_data_pomp$open_tot_pomp>0),]) +
   aes(x = open_tot_pomp) +
   geom_histogram(binwidth = 1,
-                 fill = "gold")
+                 fill = "dark green")
+greenplot + compplot + intelplot + openplot
 ```
 
 
@@ -120,7 +122,7 @@ Of the four pomp scored histograms, two appear to be normally distributed around
      What do these plots show?
 
 ```{r}
-ggplot(na.omit(new_green_data_pomp)) +
+comparisonplot1 <- ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
       y = comp_tot_pomp,
       fill = student,
@@ -129,7 +131,7 @@ ggplot(na.omit(new_green_data_pomp)) +
   geom_point() +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
-ggplot(na.omit(new_green_data_pomp)) +
+comparisonplot2 <- ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
       y = intel_tot_pomp,
       fill = student,
@@ -138,7 +140,7 @@ ggplot(na.omit(new_green_data_pomp)) +
   geom_point() +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
 
-ggplot(na.omit(new_green_data_pomp)) +
+comparisonplot3 <- ggplot(na.omit(new_green_data_pomp)) +
   aes(x = green_tot_pomp,
       y = open_tot_pomp,
       fill = student,
@@ -146,6 +148,8 @@ ggplot(na.omit(new_green_data_pomp)) +
   geom_point() +
   geom_point() +
   geom_smooth(data = subset(new_green_data_pomp, student == "Nonstudent"| student == "Student"))
+
+comparisonplot1 + comparisonplot2 / comparisonplot3
 
 ```
 
@@ -200,4 +204,9 @@ new_green_data_pomp %>%
 
 Nonstudents had a higher mean with less deviation from the mean than students in their green reputation data. Nonstudents also had a higher mean intel score than students. Students had higher means on comp and open variables. Additionally the standard deviation for students on these variables was higher than that for nonstudents as well. Maximum and minimum scores across the variables tended to be similar with many of the maximums and minimums matching for both nonstudents and students such as for max comp and open as well. The medians for both students and nonstudents also tended to be very similar to one another. 
   
-In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results.
+In your assignment, prepare an RMarkdown file that includes both the coding and (for 4-7) narrative descriptions of your results
+
+```{r}
+
+
+```
