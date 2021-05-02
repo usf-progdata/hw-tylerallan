@@ -34,7 +34,7 @@ family_communication_w1_child <- read_csv(here::here("Participation/Worksheets/4
 family_communication_w1_parent <- read_csv(here::here("Participation/Worksheets/4_22 tibble joining/family-communication_w1_parent.csv"))
 family_communication_w2_child <- read_csv(here::here("Participation/Worksheets/4_22 tibble joining/family-communication_w2_child.csv"))
 family_communication_w2_parent <- read_csv(here::here("Participation/Worksheets/4_22 tibble joining/family-communication_w2_parent.csv"))
-
+family_communication_emails$family_id <- family_communication_emails$id
 ```
 
 1. Merge the two wave of child data together.
@@ -69,18 +69,22 @@ family_communication_w1_child %>%
    Which families have child data but not parent data in Wave 2?
 
 ```{r}
-anti_join(family_communication_w2_child, family_communication_w2_parent, by = "family_id")
-anti_join(family_communication_w2_parent, family_communication_w2_child, by = "family_id")
+missing_parent <- anti_join(family_communication_w2_child, family_communication_w2_parent, by = "family_id")
+missing_children <- anti_join(family_communication_w2_parent, family_communication_w2_child, by = "family_id")
+
+missing_parent
+missing_children
 ```
 
 5. Which families are missing both parent and child data in Wave 2?
    (Hint: You might need to look at Wave 1 as well.)
    
 ```{r}
-family_communication_w1_child %>% 
-   full_join(family_communication_w1_parent, by = "family_id") %>% 
-   anti_join(family_communication_w2_child, by = "family_id") %>% 
-   anti_join(family_communication_w2_parent, by = "family_id")
+full_wave1 <- family_communication_w1_child %>% 
+  full_join(family_communication_w1_parent, by = "family_id", suffix = c("_child1", "_parent1"))
+full_wave2 <- family_communication_w2_child %>% 
+   full_join(family_communication_w2_parent, by = "family_id", suffix = c("_child2", "_parent2"))
+anti_join(full_wave1, full_wave2, by = "family_id")
 ```
    
 6. You would like to send an email to the families that have missing data.
@@ -88,6 +92,21 @@ family_communication_w1_child %>%
    Create columns to indicate which people in the family are missing data.
    The ID columns have different names in the two datasets.
    You can manage that by specifying `by` with something like: `by = c("id.x" = "id.y")`
+   
+```{r}
+m_child_email <- family_communication_emails %>% 
+   semi_join(missing_children, by = "family_id")
+m_child_email
+
+m_parent_email <- family_communication_emails %>% 
+   semi_join(missing_parent, by = "family_id")
+m_parent_email
+
+missing_email_list <- m_child_email %>% 
+   full_join(m_parent_email, by = "family_id")
+
+missing_email_list
+```
    
 7. Create a long-format dataset by row-binding the four datasets.
    Indicate the wave and person the data come from with columns named `wave` and `person`.
