@@ -15,7 +15,7 @@ One of the many ways that individuals differ is through the tasks and activities
 
 ## The dataset
 
-This dataset contains information about mono and dyzygotic twins and their parents occupations. The twins in this study completed two measures of vocational interest, the Personal Globe Inventory (pgi) and the   to establish their interest profiles. Parent occupations were assessed at the time of the child's birth and were coded into ONET occupation codes. Regression analysis will be done to predict the child's interest scores based on their parent's occupation. Children's interest scores are in their raw form and will be combined into an average for each participant which will be used as the criterion variable in the regression analysis. The ONET occupation codes will be trimmed to just represent the broader job family rather than the specific job titles and these will be used as predictors in a regression equation. 
+This dataset contains information about mono and dyzygotic twins and their parents occupations. The twins in this study completed two measures of vocational interest, the Personal Globe Inventory (pgi) and the   to establish their interest profiles. Parent occupations were assessed at the time of the child's birth and were coded into ONET occupation codes. Regression analysis will be done to predict the child's interest scores based on their parent's occupation. Children's interest scores are in their raw form and will be combined into an average for each participant which will be used as the criterion variable in the regression analysis.
 
 First we need to load the required packages and read in the data.
 
@@ -50,62 +50,58 @@ avgdata <- trimdata %>%
          pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))
 
 avgdata
-#take off the `-numbers` from the occupation codes
 
-trimdata$MONET <- factor(trimdata$MONET)
-c <-  c("43-6014.00", "39-9011.00", "29-1122.00")
-gsub(c("-6014.00", "-9011.00", "29-1122.00"), "", c)
 
 ```
 
-Creating a table to show each the mean, standard deviation, minimum average score, maximum average score, and the correlation between the two average scores on the inventories for both interest inventories grouped by the child's identification number. 
+Creating a table to show each the mean, standard deviation, minimum average score and maximum average score for the two interest inventories as well as providing a correlation between the two interest inventories using the average scores from the whole sample. 
 
 ```{r}
 avgdata %>%
-  select(pgi_avg, pci_avg) %>% 
+  ungroup() %>% 
   summarize(across(c(pgi_avg:pci_avg),
             list(mu = ~mean(.x, na.rm = TRUE),
-                 sd = ~sd(.x, na.rm = TRUE),
-                 min = ~min(.x),
-                 max = ~max(.x)),
+                 sd = ~sd(.x, na.rm = TRUE)),
                  r = cor(pgi_avg, pci_avg, use = "pairwise"),
-            ),
-  .groups = "drop")
-
-
-#For some reason that I cannot figure out, the output of this code is a table that repeats each individual data point as the output for each of these transformations rather than doing the computations for the two columns. 
-
-#Trying to put together a summary table by hand with the correct values                
-pgi_mean <- mean(avgdata$pgi_avg, na.rm = TRUE)
-pgi_sd <- sd(avgdata$pgi_avg, na.rm = TRUE)  
-pci_mean <- mean(avgdata$pci_avg, na.rm = TRUE)
-pci_sd <- sd(avgdata$pci_avg, na.rm = TRUE)
-r <- cor(avgdata$pgi_avg, avgdata$pci_avg, use = "pairwise")
-
-SummaryTable <- as.data.frame(c(pgi_mean, pgi_sd, pci_mean, pci_sd, r), row.names = c("PGI_Mean", "PGI_SD", "PCI_Mean", "PCI_SD", "Correlation"), col.names = "Score")
-colnames(SummaryTable) <- c("Score")
-as_tibble(SummaryTable)
-rownames(SummaryTable) <- c("PGI_Mean", "PGI_SD", "PCI_Mean", "PCI_SD", "Correlation")
-
-SummaryTable
+            ))
 ```
 
 
 Run the regression predicting interest score based on parent occupation
 
 ```{r}
-#lm(~)
+reamodel <- glm(PCI_Rea ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(reamodel)
 
+invmodel <- glm(PCI_Inv ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(invmodel)
+
+artmodel <- glm(PCI_Art ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(artmodel)
+
+socmodel <- glm(PCI_Soc ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(socmodel)
+
+entmodel <- glm(PCI_Soc ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(socmodel)
+
+conmodel <- glm(PCI_Con ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+summary(conmodel)
 ```
 
 Create a scatterplot to show the relationship between parent occupation category and child interest scores.
-
-```{r}
-
-
-```
-
-
 
 ```{r}
 practice_plot <- thesisdata %>% 
@@ -120,3 +116,7 @@ ggsave(here::here("Output", "Figures", "practice_plot.pdf"))
 ggsave(here::here("Output", "Figures", "practice_plot.tiff"))
 ggsave(here::here("Output", "Figures", "practice_plot.png"))
 ```
+
+
+## Describing Results
+
