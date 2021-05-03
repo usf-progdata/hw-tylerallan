@@ -13,7 +13,7 @@ output:
 
 One of the many ways that individuals differ is through the tasks and activities they prefer to do. The study of vocational interests arose in Industrial-Organizational psychology to research what tasks are unique to a job and how individuals differ in the types of work related tasks they prefer to perform. Part of the research done on this topic has focused on the heritability of career interests. Previous research established a moderate genetic component to career interests which indicates that parent's can pass their interests on to their children through their genes. However, genes are not the only influence that parents have in the development of their children's career interests. Parents also shape the environment that children are raised in and provide their children with a first look into the working world. By viewing their parent's successes and failures at specific job tasks or through conversations their parents have about their work, children develop their own viewpoint of how they would perform on those jobs. This project is hoping to show the relationship between parent occupations and children career interest which develops through these genetic and environmental factors. 
 
-## The dataset
+### The dataset
 
 This dataset contains information about mono and dyzygotic twins and their parents occupations. The twins in this study completed two measures of vocational interest, the Personal Globe Inventory (pgi) and the   to establish their interest profiles. Parent occupations were assessed at the time of the child's birth and were coded into ONET occupation codes. Regression analysis will be done to predict the child's interest scores based on their parent's occupation. Children's interest scores are in their raw form and will be combined into an average for each participant which will be used as the criterion variable in the regression analysis.
 
@@ -99,7 +99,7 @@ entmodel <- glm(PCI_Soc ~ MONET + FONET_J,
 conmodel <- glm(PCI_Con ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(socmodel)
+
 ```
 
 Create a scatterplot to show the relationship between parent occupation category and child interest scores.
@@ -116,8 +116,6 @@ practice_plot1 <- avgdata %>%
          y = guide_axis(title = "Realistic Interest Score"))+
   ggtitle("Relationship of Mother's Job on Child Realistic Interest")+
   scale_x_discrete(na.translate = FALSE)
-
-practice_plot1
 
 practice_plot2 <- avgdata %>%
   group_by(MONET) %>% 
@@ -191,6 +189,6 @@ ggsave(here::here("Output", "Figures", "full_plot.png"))
 ```
 
 
-## Describing Results
+### Describing Results
 
 The general linear model analysis of parental occupations on childrens' interests revealed a number of significant effects across the six RIASEC dimensions. Mothers who are teachers had the strongest effect of predicting children with realistic interests while fathers who were working as hairdressers had the greatest impact in predicting their kids social interests. The graphs for the different regression models show little association between the various occupation groups and children's interests which reflects the general trend of effects found in the model. This is most likely due to user error and trying to run a regression with a categorical variable with as many categories as the parental job codes had. Overall there is not much support for the original research question from the data here.
