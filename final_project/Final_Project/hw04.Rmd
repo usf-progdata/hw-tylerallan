@@ -50,7 +50,6 @@ avgdata <- trimdata %>%
   mutate(pgi_avg = mean(c_across(pgi_01_I:pgi_40_I), na.rm = TRUE),
          pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))
 
-avgdata
 
 
 ```

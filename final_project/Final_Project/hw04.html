@@ -244,48 +244,7 @@ trimdata$Childnumber...37 &lt;- factor(trimdata$Childnumber...37)
 avgdata &lt;- trimdata %&gt;% 
   rowwise %&gt;% 
   mutate(pgi_avg = mean(c_across(pgi_01_I:pgi_40_I), na.rm = TRUE),
-         pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))
-
-avgdata</code></pre>
-<pre><code>## # A tibble: 339 x 134
-## # Rowwise: 
-##    `Family Number.~ Childnumber...37 pgi_01_I pgi_01_c pgi_02_I pgi_02_c
-##    &lt;fct&gt;            &lt;fct&gt;               &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 197              1972                    1        1        2        3
-##  2 235              2351                    4        7        3        4
-##  3 95               950                     4        4        2        3
-##  4 257              2572                    1        4        1        1
-##  5 269              2691                    5        4        2        5
-##  6 &lt;NA&gt;             &lt;NA&gt;                    1        4        1        1
-##  7 72               722                     3        6        6        5
-##  8 35               352                     6        6        5        4
-##  9 37               371                     2        3        2        4
-## 10 127              1271                    5        6        4        5
-## # ... with 329 more rows, and 128 more variables: pgi_03_I &lt;dbl&gt;,
-## #   pgi_03_c &lt;dbl&gt;, pgi_04_I &lt;dbl&gt;, pgi_04_c &lt;dbl&gt;, pgi_05_I &lt;dbl&gt;,
-## #   pgi_05_c &lt;dbl&gt;, pgi_06_I &lt;dbl&gt;, pgi_06_c &lt;dbl&gt;, pgi_07_I &lt;dbl&gt;,
-## #   pgi_07_c &lt;dbl&gt;, pgi_08_I &lt;dbl&gt;, pgi_08_c &lt;dbl&gt;, pgi_09_I &lt;dbl&gt;,
-## #   pgi_09_c &lt;dbl&gt;, pgi_10_I &lt;dbl&gt;, pgi_10_c &lt;dbl&gt;, pgi_11_I &lt;dbl&gt;,
-## #   pgi_11_c &lt;dbl&gt;, pgi_12_I &lt;dbl&gt;, pgi_12_c &lt;dbl&gt;, pgi_13_I &lt;dbl&gt;,
-## #   pgi_13_c &lt;dbl&gt;, pgi_14_I &lt;dbl&gt;, pgi_14_c &lt;dbl&gt;, pgi_15_I &lt;dbl&gt;,
-## #   pgi_15_c &lt;dbl&gt;, pgi_16_I &lt;dbl&gt;, pgi_16_c &lt;dbl&gt;, pgi_17_I &lt;dbl&gt;,
-## #   pgi_17_c &lt;dbl&gt;, pgi_18_I &lt;dbl&gt;, pgi_18_c &lt;dbl&gt;, pgi_19_I &lt;dbl&gt;,
-## #   pgi_19_c &lt;dbl&gt;, pgi_20_I &lt;dbl&gt;, pgi_20_c &lt;dbl&gt;, pgi_21_I &lt;dbl&gt;,
-## #   pgi_21_c &lt;dbl&gt;, pgi_22_I &lt;dbl&gt;, pgi_22_c &lt;dbl&gt;, pgi_23_I &lt;dbl&gt;,
-## #   pgi_23_c &lt;dbl&gt;, pgi_24_I &lt;dbl&gt;, pgi_24_c &lt;dbl&gt;, pgi_25_I &lt;dbl&gt;,
-## #   pgi_25_c &lt;dbl&gt;, pgi_26_I &lt;dbl&gt;, pgi_26_c &lt;dbl&gt;, pgi_27_I &lt;dbl&gt;,
-## #   pgi_27_c &lt;dbl&gt;, pgi_28_I &lt;dbl&gt;, pgi_28_c &lt;dbl&gt;, pgi_29_I &lt;dbl&gt;,
-## #   pgi_29_c &lt;dbl&gt;, pgi_30_I &lt;dbl&gt;, pgi_30_c &lt;dbl&gt;, pgi_31_I &lt;dbl&gt;,
-## #   pgi_31_c &lt;dbl&gt;, pgi_32_I &lt;dbl&gt;, pgi_32_c &lt;dbl&gt;, pgi_33_I &lt;dbl&gt;,
-## #   pgi_33_c &lt;dbl&gt;, pgi_34_I &lt;dbl&gt;, pgi_34_c &lt;dbl&gt;, pgi_35_I &lt;dbl&gt;,
-## #   pgi_35_c &lt;dbl&gt;, pgi_36_I &lt;dbl&gt;, pgi_36_c &lt;dbl&gt;, pgi_37_I &lt;dbl&gt;,
-## #   pgi_37_c &lt;dbl&gt;, pgi_38_I &lt;dbl&gt;, pgi_38_c &lt;dbl&gt;, pgi_39_I &lt;dbl&gt;,
-## #   pgi_39_c &lt;dbl&gt;, pgi_40_I &lt;dbl&gt;, pgi_40_c &lt;dbl&gt;, pci_01 &lt;dbl&gt;, pci_02 &lt;dbl&gt;,
-## #   pci_03 &lt;dbl&gt;, pci_04 &lt;dbl&gt;, pci_05 &lt;dbl&gt;, pci_06 &lt;dbl&gt;, pci_07 &lt;dbl&gt;,
-## #   pci_08 &lt;dbl&gt;, pci_09 &lt;dbl&gt;, pci_10 &lt;dbl&gt;, pci_11 &lt;dbl&gt;, pci_12 &lt;dbl&gt;,
-## #   pci_13 &lt;dbl&gt;, pci_14 &lt;dbl&gt;, pci_15 &lt;dbl&gt;, pci_16 &lt;dbl&gt;, pci_17 &lt;dbl&gt;,
-## #   pci_18 &lt;dbl&gt;, pci_19 &lt;dbl&gt;, pci_20 &lt;dbl&gt;, pci_21 &lt;dbl&gt;, pci_22 &lt;dbl&gt;,
-## #   pci_23 &lt;dbl&gt;, pci_24 &lt;dbl&gt;, ...</code></pre>
+         pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))</code></pre>
 <p>Creating a table to show each the mean, standard deviation, minimum average score and maximum average score for the two interest inventories as well as providing a correlation between the two interest inventories using the average scores from the whole sample.</p>
 <pre class="r"><code>avgdata %&gt;%
   ungroup() %&gt;% 
