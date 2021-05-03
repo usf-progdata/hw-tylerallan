@@ -1,5 +1,5 @@
 ---
-title: "Hw_04"
+title: "Final Project"
 author: "Tyler Allan"
 date: "3/8/2021"
 output: 
@@ -7,15 +7,27 @@ output:
           github_document: default
 ---
 
-Reading in the data and all needed packages
+## Introduction
+
+### Research Question
+
+One of the many ways that individuals differ is through the tasks and activities they prefer to do. The study of vocational interests arose in Industrial-Organizational psychology to research what tasks are unique to a job and how individuals differ in the types of work related tasks they prefer to perform. Part of the research done on this topic has focused on the heritability of career interests. Previous research established a moderate genetic component to career interests which indicates that parent's can pass their interests on to their children through their genes. However, genes are not the only influence that parents have in the development of their children's career interests. Parents also shape the environment that children are raised in and provide their children with a first look into the working world. By viewing their parent's successes and failures at specific job tasks or through conversations their parents have about their work, children develop their own viewpoint of how they would perform on those jobs. This project is hoping to show the relationship between parent occupations and children career interest which develops through these genetic and environmental factors. 
+
+## The dataset
+
+This dataset contains information about mono and dyzygotic twins and their parents occupations. The twins in this study completed two measures of vocational interest, the Personal Globe Inventory (pgi) and the   to establish their interest profiles. Parent occupations were assessed at the time of the child's birth and were coded into ONET occupation codes. Regression analysis will be done to predict the child's interest scores based on their parent's occupation. Children's interest scores are in their raw form and will be combined into an average for each participant which will be used as the criterion variable in the regression analysis. The ONET occupation codes will be trimmed to just represent the broader job family rather than the specific job titles and these will be used as predictors in a regression equation. 
+
+First we need to load the required packages and read in the data.
+
 ```{r}
 library(tidyverse)
 library(readxl)
+
 thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx"))
 ```
 
 
-Creating a summary table for the PGI and the PCI items
+First we need to trim down the dataset so that it only includes the interest items from the two interest measures (pgi and pci) and the occupation codes for the mother and father.
 ```{r}
 thesisdatam <- thesisdata %>% 
   select(pgi_01_I:pci_42, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
