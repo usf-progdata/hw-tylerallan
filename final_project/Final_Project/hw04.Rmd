@@ -29,6 +29,24 @@ thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx")
 
 First we need to trim down the dataset so that it only includes the interest items from the two interest measures (pgi and pci) and the occupation codes for the mother and father.
 ```{r}
+trimdata <- thesisdata %>%
+  select(`Family Number...30`, pgi_01_I:pci_42, PCI_Rea, PCI_Inv, PCI_Art, PCI_Soc, PCI_Ent, PCI_Con, MONET, FONET_J, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
+  slice(417:755)
+
+pgidata <- trimdata %>% 
+  select(pgi_01_I:pgi_40_c)
+
+pcidata <- trimdata %>% 
+  select(pci_01:pci_42)
+
+
+
+
+
+
+
+
+
 thesisdatam <- thesisdata %>% 
   select(pgi_01_I:pci_42, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
   mutate(I_tot = mean(c(pgi_01_I,pgi_02_I,pgi_03_I,pgi_04_I,pgi_05_I,pgi_06_I,pgi_07_I,pgi_08_I,pgi_09_I,pgi_10_I,pgi_11_I,pgi_12_I,pgi_13_I,pgi_14_I,
@@ -51,15 +69,61 @@ thesisdatam <- thesisdata %>%
 thesisdatam %>% 
   pivot_longer(
     cols = "I_tot_mu":"PCI_tot_max",
-    names_to = c("Item", "Value"),
-    names_sep = "_tot_"
+    names_to = "Items",
+    names_sep = "_tot_",
+    values_to = "Values"
   )
 thesisdatam
 
 ```
 
+Now that the data has been read in, we need to clean the variables so they can be used in our analysis.
 
-Creating a Plot for the PGI
+```{r}
+#create mean score of liking and competence variables for pgi
+avgdata <- trimdata %>% 
+  rowwise %>% 
+  mutate(pgi_avg = mean(c_across(pgi_01_I:pgi_40_I), na.rm = TRUE),
+         pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))
+
+
+#take off the `-numbers` from the occupation codes
+trimdata <- trimdata %>% 
+  mutate
+```
+
+Creating a table to show each the mean, standard deviation, minimum average score, and maximum average score for both interest inventories grouped by the family id. 
+
+```{r}
+avgdata %>%
+  group_by(`Family Number...30`) %>% 
+  summarize(pgi_mu = mean(pgi_avg),
+            pgi_sd = sd(pgi_avg),
+            pgi_min = min(pgi_avg),
+            pgi_max = max(pgi_avg),
+            pci_mu = mean(pci_avg),
+            pci_sd = sd(pci_avg),
+            pci_min = min(pci_avg),
+            pci_max = max(pci_avg))
+```
+
+
+Run the regression predicting interest score based on parent occupation
+
+```{r}
+#lm(~)
+
+```
+
+Create a scatterplot to show the relationship between parent occupation category and child interest scores.
+
+```{r}
+
+
+```
+
+
+
 ```{r}
 practice_plot <- thesisdata %>% 
   ggplot()+
