@@ -23,6 +23,7 @@ First we need to load the required packages and read in the data.
 library(tidyverse)
 library(readxl)
 library(correlation)
+library(gridExtra)
 
 thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx"))
 ```
@@ -73,50 +74,123 @@ Run the regression predicting interest score based on parent occupation
 reamodel <- glm(PCI_Rea ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(reamodel)
+
 
 invmodel <- glm(PCI_Inv ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(invmodel)
+
 
 artmodel <- glm(PCI_Art ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(artmodel)
+
 
 socmodel <- glm(PCI_Soc ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(socmodel)
+
 
 entmodel <- glm(PCI_Soc ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(socmodel)
+
 
 conmodel <- glm(PCI_Con ~ MONET + FONET_J,
                 data = avgdata,
                 na.action = na.omit)
-summary(conmodel)
+summary(socmodel)
 ```
 
 Create a scatterplot to show the relationship between parent occupation category and child interest scores.
 
 ```{r}
-practice_plot <- thesisdata %>% 
+practice_plot1 <- avgdata %>%
+  group_by(MONET) %>% 
   ggplot()+
-  aes(y = pgi_01_I,
-      x = pgi_01_c) +
-  geom_point()
+  aes(x = as.factor(MONET),
+      y = PCI_Rea) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Realistic Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Realistic Interest")+
+  scale_x_discrete(na.translate = FALSE)
 
-practice_plot
+practice_plot1
 
-ggsave(here::here("Output", "Figures", "practice_plot.pdf"))
-ggsave(here::here("Output", "Figures", "practice_plot.tiff"))
-ggsave(here::here("Output", "Figures", "practice_plot.png"))
+practice_plot2 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Inv) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Investigative Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Investigative Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot3 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Art) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Artistic Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Artistic Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot4 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Soc) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Social Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Social Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot5 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Ent) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Enterprising Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Enterprising Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot6 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Con) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Conventional Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Conventional Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+full_plot <- grid.arrange(practice_plot1, practice_plot2, practice_plot3, practice_plot4, practice_plot5, practice_plot6, ncol = 3)
+  
+ggsave(here::here("Output", "Figures", "full_plot.pdf"))
+ggsave(here::here("Output", "Figures", "full_plot.tiff"))
+ggsave(here::here("Output", "Figures", "full_plot.png"))
 ```
 
 
 ## Describing Results
 
+The general linear model analysis of parental occupations on childrens' interests revealed a number of significant effects across the six RIASEC dimensions. Mothers who are teachers had the strongest effect of predicting children with realistic interests while fathers who were working as hairdressers had the greatest impact in predicting their kids social interests. The graphs for the different regression models show little association between the various occupation groups and children's interests which reflects the general trend of effects found in the model. This is most likely due to user error and trying to run a regression with a categorical variable with as many categories as the parental job codes had. Overall there is not much support for the original research question from the data here.
