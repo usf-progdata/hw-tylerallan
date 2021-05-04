@@ -1,5 +1,5 @@
 ---
-title: "Hw_04"
+title: "Final Project"
 author: "Tyler Allan"
 date: "3/8/2021"
 output: 
@@ -7,57 +7,187 @@ output:
           github_document: default
 ---
 
-Reading in the data and all needed packages
+## Introduction
+
+### Research Question
+
+One of the many ways that individuals differ is through the tasks and activities they prefer to do. The study of vocational interests arose in Industrial-Organizational psychology to research what tasks are unique to a job and how individuals differ in the types of work related tasks they prefer to perform. Part of the research done on this topic has focused on the heritability of career interests. Previous research established a moderate genetic component to career interests which indicates that parent's can pass their interests on to their children through their genes. However, genes are not the only influence that parents have in the development of their children's career interests. Parents also shape the environment that children are raised in and provide their children with a first look into the working world. By viewing their parent's successes and failures at specific job tasks or through conversations their parents have about their work, children develop their own viewpoint of how they would perform on those jobs. This project is hoping to show the relationship between parent occupations and children career interest which develops through these genetic and environmental factors. 
+
+### The dataset
+
+This dataset contains information about mono and dyzygotic twins and their parents occupations. The twins in this study completed two measures of vocational interest, the Personal Globe Inventory (pgi) and the   to establish their interest profiles. Parent occupations were assessed at the time of the child's birth and were coded into ONET occupation codes. Regression analysis will be done to predict the child's interest scores based on their parent's occupation. Children's interest scores are in their raw form and will be combined into an average for each participant which will be used as the criterion variable in the regression analysis.
+
+First we need to load the required packages and read in the data.
+
 ```{r}
 library(tidyverse)
 library(readxl)
+library(correlation)
+library(gridExtra)
+
 thesisdata <- read_xlsx(here::here("Data", "PAINT_Study_Wave_1_3_2021-3-8.xlsx"))
 ```
 
 
-Creating a summary table for the PGI and the PCI items
+First we need to trim down the dataset so that it only includes the interest items from the two interest measures (pgi and pci) and the occupation codes for the mother and father.
 ```{r}
-thesisdatam <- thesisdata %>% 
-  select(pgi_01_I:pci_42, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
-  mutate(I_tot = mean(c(pgi_01_I,pgi_02_I,pgi_03_I,pgi_04_I,pgi_05_I,pgi_06_I,pgi_07_I,pgi_08_I,pgi_09_I,pgi_10_I,pgi_11_I,pgi_12_I,pgi_13_I,pgi_14_I,
-                        pgi_15_I,pgi_16_I,pgi_17_I,pgi_18_I,pgi_19_I,pgi_20_I,pgi_21_I,pgi_22_I,pgi_23_I,pgi_24_I,pgi_25_I,pgi_26_I,pgi_27_I,pgi_28_I,
-                        pgi_29_I,pgi_30_I,pgi_31_I,pgi_32_I,pgi_33_I,pgi_34_I,pgi_35_I,pgi_36_I,pgi_37_I,pgi_38_I,pgi_39_I,pgi_40_I), na.rm = TRUE),
-         C_tot = mean(c(pgi_01_c,pgi_02_c,pgi_03_c,pgi_04_c,pgi_05_c,pgi_06_c,pgi_07_c,pgi_08_c,pgi_09_c,pgi_10_c,pgi_11_c,pgi_12_c,pgi_13_c,pgi_14_c,
-                        pgi_15_c,pgi_16_c,pgi_17_c,pgi_18_c,pgi_19_c,pgi_20_c,pgi_21_c,pgi_22_c,pgi_23_c,pgi_24_c,pgi_25_c,pgi_26_c,pgi_27_c,pgi_28_c,
-                        pgi_29_c,pgi_30_c,pgi_31_c,pgi_32_c,pgi_33_c,pgi_34_c,pgi_35_c,pgi_36_c,pgi_37_c,pgi_38_c,pgi_39_c,pgi_40_c), na.rm = TRUE),
-         PCI_tot = mean(c(pci_01,pci_02,pci_03,pci_04,pci_05,pci_06,pci_07,pci_08,pci_09,pci_10,pci_11,pci_12,pci_13,pci_14,pci_15,pci_16,pci_17,pci_18,
-                          pci_19,pci_20,pci_21,pci_22,pci_23,pci_24,pci_25,pci_26,pci_27,pci_28,pci_29,pci_30,pci_31,pci_32,pci_33,pci_34,pci_35,pci_36,
-                          pci_37,pci_38,pci_39,pci_40,pci_41,pci_42), na.rm = TRUE)) %>% 
-  summarize(across(c(I_tot:PCI_tot),
-                   list(
-                     mu = ~mean(.x, na.rm = TRUE),
-                     sd = ~sd(.x, na.rm = TRUE),
-                     min = ~min(.x, na.rm = TRUE),
-                     max = ~max(.x, na.rm = TRUE)),
-                   ))
-
-thesisdatam %>% 
-  pivot_longer(
-    cols = "I_tot_mu":"PCI_tot_max",
-    names_to = c("Item", "Value"),
-    names_sep = "_tot_"
-  )
-thesisdatam
+trimdata <- thesisdata %>%
+  select(`Family Number...30`, Childnumber...37, pgi_01_I:pci_42, PCI_Rea, PCI_Inv, PCI_Art, PCI_Soc, PCI_Ent, PCI_Con, MONET, FONET_J, -`Current Training`, - `Current Job`, -`Percentage Independent`) %>% 
+  slice(417:755)
 
 ```
 
+Now that the data has been read in, we need to clean the variables so they can be used in our analysis.
 
-Creating a Plot for the PGI
 ```{r}
-practice_plot <- thesisdata %>% 
+#create mean score of liking and competence variables for pgi
+trimdata$`Family Number...30` <- factor(trimdata$`Family Number...30`)
+trimdata$Childnumber...37 <- factor(trimdata$Childnumber...37)
+
+
+avgdata <- trimdata %>% 
+  rowwise %>% 
+  mutate(pgi_avg = mean(c_across(pgi_01_I:pgi_40_I), na.rm = TRUE),
+         pci_avg = mean(c_across(pci_01:pci_42), na.rm = TRUE))
+
+
+
+```
+
+Creating a table to show each the mean, standard deviation, minimum average score and maximum average score for the two interest inventories as well as providing a correlation between the two interest inventories using the average scores from the whole sample. 
+
+```{r}
+avgdata %>%
+  ungroup() %>% 
+  summarize(across(c(pgi_avg:pci_avg),
+            list(mu = ~mean(.x, na.rm = TRUE),
+                 sd = ~sd(.x, na.rm = TRUE)),
+                 r = cor(pgi_avg, pci_avg, use = "pairwise"),
+            ))
+```
+
+
+Run the regression predicting interest score based on parent occupation
+
+```{r}
+reamodel <- glm(PCI_Rea ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+
+invmodel <- glm(PCI_Inv ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+
+artmodel <- glm(PCI_Art ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+
+socmodel <- glm(PCI_Soc ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+
+entmodel <- glm(PCI_Soc ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+
+conmodel <- glm(PCI_Con ~ MONET + FONET_J,
+                data = avgdata,
+                na.action = na.omit)
+
+```
+
+Create a scatterplot to show the relationship between parent occupation category and child interest scores.
+
+```{r}
+practice_plot1 <- avgdata %>%
+  group_by(MONET) %>% 
   ggplot()+
-  aes(y = pgi_01_I,
-      x = pgi_01_c) +
-  geom_point()
+  aes(x = as.factor(MONET),
+      y = PCI_Rea) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Realistic Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Realistic Interest")+
+  scale_x_discrete(na.translate = FALSE)
 
-practice_plot
+practice_plot2 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Inv) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Investigative Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Investigative Interest")+
+  scale_x_discrete(na.translate = FALSE)
 
-ggsave(here::here("Output", "Figures", "practice_plot.pdf"))
-ggsave(here::here("Output", "Figures", "practice_plot.tiff"))
-ggsave(here::here("Output", "Figures", "practice_plot.png"))
+
+practice_plot3 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Art) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Artistic Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Artistic Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot4 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Soc) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Social Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Social Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot5 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Ent) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Enterprising Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Enterprising Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+
+practice_plot6 <- avgdata %>%
+  group_by(MONET) %>% 
+  ggplot()+
+  aes(x = as.factor(MONET),
+      y = PCI_Con) +
+  geom_point() +
+  guides(x = guide_axis(title = "Mother Job Code", 
+                        check.overlap = TRUE),
+         y = guide_axis(title = "Conventional Interest Score"))+
+  ggtitle("Relationship of Mother's Job on Child Conventional Interest")+
+  scale_x_discrete(na.translate = FALSE)
+
+full_plot <- grid.arrange(practice_plot1, practice_plot2, practice_plot3, practice_plot4, practice_plot5, practice_plot6, ncol = 3)
+  
+ggsave(here::here("Output", "Figures", "full_plot.pdf"))
+ggsave(here::here("Output", "Figures", "full_plot.tiff"))
+ggsave(here::here("Output", "Figures", "full_plot.png"))
 ```
+
+
+### Describing Results
+
+The general linear model analysis of parental occupations on childrens' interests revealed a number of significant effects across the six RIASEC dimensions. Mothers who are teachers had the strongest effect of predicting children with realistic interests while fathers who were working as hairdressers had the greatest impact in predicting their kids social interests. The graphs for the different regression models show little association between the various occupation groups and children's interests which reflects the general trend of effects found in the model. This is most likely due to user error and trying to run a regression with a categorical variable with as many categories as the parental job codes had. Overall there is not much support for the original research question from the data here.
